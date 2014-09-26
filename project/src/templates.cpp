@@ -36,5 +36,6 @@ int main () {
   cout << myints.getmember(0) << '\n';
   cout << myfloats.getmember(3) << '\n';
   cout << "Wen Chuan Lee" << '\n';
+  cout << "Sophia Stembridge" << '\n';
   return 0;
 }
