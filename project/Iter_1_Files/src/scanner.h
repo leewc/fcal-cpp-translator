@@ -5,7 +5,7 @@
 #include <regex.h>
 #include <string>
 
-class Token ;
+
 
 /* This enumerated type is used to keep track of what kind of
    construct was matched. 
@@ -45,6 +45,14 @@ typedef enum tokenEnumType tokenType ;
 
 // Below you need to write your class definitions for Token and Scanner.
 
+class Token { //Can add more fields later
+	public:
+	 tokenType terminal;
+	 string lexeme;
+	 Token* next;
+};
 
-
+class Scanner{
+	Token *scan (const char *);
+};
 #endif /* SCANNER_H */
