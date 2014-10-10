@@ -41,18 +41,31 @@ Token* scanner(const char* text){
     
     //Punctuation: Begin
     regex_t leftParen;
-    leftParen = *makeRegex ("^\(");
+    leftParen = *makeRegex ("^\\(");
 
     regex_t rightParen;
-    rightParen = *makeRegex ("^)");
+    rightParen = *makeRegex ("^\\)");
 
     regex_t leftCurly;
-    leftCurly = *makeRegex ("^}");
+    leftCurly = *makeRegex ("^\\{");
 
+    regex_t rightCurly;
+    rightCurly = *makeRegex ("^\\{");
 
+    regex_t leftSquare;
+    leftSquare = *makeRegex ("^\\[");
 
+    regex_t rightSquare;
+    rightSquare = *makeRegex ("^\\]");
 
+    regex_t comma;
+    rightCurly = *makeRegex ("^,");
 
+    regex_t semiColon;
+    semiColon = *makeRegex ("^;");
+
+    regex_t colon;
+    semiColon = *makeRegex ("^:");
 
 //now start looking at the text
 
