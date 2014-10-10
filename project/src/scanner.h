@@ -48,9 +48,16 @@ typedef enum tokenEnumType tokenType ;
 class Token { //Can add more fields later
 	public:
 	 tokenType terminal;
-	 string lexeme;
+	 std::string lexeme;
 	 Token* next;
+	 
+	 Token (tokenType, std::string);
 };
+
+Token::Token (tokenType _term, std::string _lex) {
+	terminal = _term;
+	lexeme = _lex;
+}
 
 class Scanner{
 	Token *scan (const char *);
