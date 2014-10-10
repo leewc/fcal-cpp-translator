@@ -1,4 +1,4 @@
-/* A small meaningless comment */
+/* Just a small meaningless comment */
 #ifndef SCANNER_H
 #define SCANNER_H
 
