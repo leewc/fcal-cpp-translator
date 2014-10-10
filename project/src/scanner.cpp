@@ -17,6 +17,42 @@ Token* scanner(const char* text){
 	Token* head;
 //first make all the regexes for each token type
 
+    regex_t whiteSpace ;
+    whiteSpace = *makeRegex ("^[\n\t\r ]+") ;
+
+    regex_t blockComment ;
+    blockComment = *makeRegex ("^/\\*([^\\*]|\\*+[^\\*/])*\\*+/");
+
+    regex_t lineComment ;
+    lineComment = *makeRegex ("^//[^\n]*\n");
+
+    //Constants: Begin
+    regex_t stringConst ;
+    word = *makeRegex ("\"^([a-z0-9A-Z]+)\"") ;
+
+    regex_t intConst; 
+    integerConst = *makeRegex("^[0-9]*");
+
+    regex_t floatConst ;
+    // modified to include the count of floating point numbers
+    // somehow using / instead of [] complains, ^ is needed to show front
+    floatConst = *makeRegex ("^[0-9]*[.]*[0-9]+");
+    //Constants: End
+    
+    //Punctuation: Begin
+    regex_t leftParen;
+    leftParen = *makeRegex ("^\(");
+
+    regex_t rightParen;
+    rightParen = *makeRegex ("^)");
+
+    regex_t leftCurly;
+    leftCurly = *makeRegex ("^}");
+
+
+
+
+
 
 //now start looking at the text
 
