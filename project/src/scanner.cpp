@@ -56,6 +56,48 @@ Token* scanner(const char* text){
 	regex_t* printKwd;
 	printKwd = makeRegex("^print");
 	
+	regex_t*  assign;
+	assign = makeRegex("^=");
+	
+	regex_t* plusSign;
+	plusSign = makeRegex("^\\+");
+	
+	regex_t* star;
+	star = makeRegex("^\\*");
+	
+	regex_t* dash;
+	dash = makeRegex("^-");
+	
+	regex_t* forwardSlash;
+	forwardSlash = makeRegex("^/");
+	
+	regex_t* lessThan;
+	lessThan = makeRegex("^\\<");
+	
+	regex_t* lessThanEqual;
+	lessThanEqual = makeRegex("^\\<=");
+	
+	regex_t* greaterThan;
+	greaterThan = makeRegex("^\>");
+	
+	regex_t* greaterThanEqual;
+	greaterThanEqual = makeRegex("^\>=");
+	
+	regex_t* equalsEquals;
+	equalsEquals = makeRegex("^==");
+	
+	regex_t* notEqual;
+	notEqual = makeRegex("^!=");
+	
+	regex_t* andOp;
+	andOp = makeRegex("^&&");
+	
+	regex_t* orOp;
+	orOp = makeRegex("^\\|\\|");
+	
+	regex_t* notOp;
+	notOp = makeRegex("^!");
+
 //now start looking at the text
 
 //skip any initial whitespace
