@@ -48,35 +48,44 @@ Token* scanner(const char* text){
     
     //first make all the regexes for each token type
     regex_t* regArray[42];
-    
+    tokenType* tokenArray[42];
+    tokenType t;
+
     regex_t* whiteSpace ;
     whiteSpace = makeRegex ("^[\n\t\r ]+") ;
     regArray[0] = whiteSpace;
+    tokenArray[0] = t;
 
     regex_t* blockComment ;
     blockComment = makeRegex ("^/\\*([^\\*]|\\*+[^\\*/])*\\*+/");
     regArray[1] = blockComment;
+    tokenArray[1] = t.blockComment;
 
     regex_t* lineComment ;
     lineComment = makeRegex ("^//[^\n]*\n");
     regArray[2] = lineComment;
+    tokenArray[2] = t.lineComment;
 
     //Constants: Begin
     regex_t* stringConst ;
     stringConst = makeRegex ("\"^([a-z0-9A-Z]+)\"") ;
     regArray[3] = stringConst;
+    tokenArray[3] = t.stringConst;
 
     regex_t* intConst; 
     intConst = makeRegex("^[0-9]*");
     regArray[4] = intConst;
+    tokenArray[4] = t.intConst;
 
     regex_t* floatConst ;
     // modified to include the count of floating point numbers
     // somehow using / instead of [] complains, ^ is needed to show front
     floatConst = makeRegex ("^[0-9]*[.]*[0-9]+");
     regArray[5] = floatConst;
+    tokenArray[5] = t.floatConst;
+
     //Constants: End
-    
+    /*    
     //Punctuation: Begin
     regex_t* leftParen;
     leftParen = makeRegex ("^\\(");
@@ -221,7 +230,7 @@ Token* scanner(const char* text){
     regex_t* notOp;
     notOp = makeRegex("^!");
     regArray[41] = notOp;
-
+    */
     //now start looking at the text
     int numMatchedChars = 0;
     //skip any initial whitespace
@@ -241,21 +250,24 @@ Token* scanner(const char* text){
 	  if (numMatchedChars > maxNumMatchedChars) {
 	    maxNumMatchedChars = numMatchedChars ;
 	    //matchType = wordMatch ;
-	  }
-	  Token *current;
-	  Token aToken = Token(term, lex);
-	  if(head == NULL) {
-	    head = aToken;
-	    current = head;
-	  }
-	  else {
-	    current.next = aToken;
-	    current = current.next;
-	  }
-	  text = text + numMatchedChars;
-	}
-    }
+	    // initialize a char array that holds the matched characters and copy
+	    char lexeme[maxNumMatchedChars+1];
+	    strcpy(lexeme,text,maxNumMatchedChars);
 
-    
+	    Token *current;
+	    Token aToken = Token(tokenArray[i],lexeme);
+	    if(head == NULL) {
+	      head = aToken;
+	      current = head;
+	    }
+	    else {
+	      current.next = aToken;
+	      current = current.next;
+	    }
+	    text = text + numMatchedChars;
+	  }
+	}
+      text = text +1;
+    }
 
 }

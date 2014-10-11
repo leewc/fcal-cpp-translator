@@ -62,4 +62,6 @@ Token::Token (tokenType _term, std::string _lex) {
 class Scanner{
 	Token *scan (const char *);
 };
+
+Token* scanner(const char* text);
 #endif /* SCANNER_H */
