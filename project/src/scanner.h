@@ -3,7 +3,7 @@
 #define SCANNER_H
 
 #include <regex.h>
-#include <string.h>
+#include <string>
 
 
 
@@ -48,19 +48,19 @@ typedef enum tokenEnumType tokenType ;
 class Token { //Can add more fields later
 	public:
 	 tokenType terminal;
-	 char* lexeme;
+	 std::string lexeme;
 	 Token* next;
-   Token(tokenType, char*, Token*);
-   void setToken(tokenType, char*, Token*);
+   Token(tokenType, std::string, Token*);
+   void setToken(tokenType, std::string, Token*);
 };
 
 //Token constructor
-Token::Token (tokenType _term, char* _lex, Token* _next) {
+Token::Token (tokenType _term, std::string _lex, Token* _next) {
 	setToken(_term,_lex,_next);
 };
 
 //Token set members
-void Token::setToken(tokenType inTerm, char* inLex, Token* inNext){
+void Token::setToken(tokenType inTerm, std::string inLex, Token* inNext){
      terminal = inTerm;
      lexeme = inLex;
      next = inNext;
@@ -68,8 +68,8 @@ void Token::setToken(tokenType inTerm, char* inLex, Token* inNext){
 
 
 class Scanner{
+      public:
 	Token *scan (const char *);
 };
-
-Token* scanner(const char* text);
+Scanner::scanner()
 #endif /* SCANNER_H */

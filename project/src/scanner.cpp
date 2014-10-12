@@ -8,11 +8,11 @@ copy of the original text (terminal), what type of token it is
 #include <stdlib.h>
 
 //included the string header or else C++ doesn't support strings
-//you forgot the .h
 #include <string.h>
 
 #include "scanner.h"
 #include "regex.h"
+#include "regex.cpp"
 
 
 //placed on top or else scan cannot find it
@@ -43,7 +43,7 @@ int consumeWhiteSpace(regex_t *whiteSpace,
 /*scanner will take in text in the form of char*s and return a
 pointer to the top of the list.
 */
-Token* scanner(const char* text){
+Token* Scanner::scan(const char* text){
     Token* head;
     
     //first make all the regexes for each token type
@@ -279,7 +279,7 @@ Token* scanner(const char* text){
     //try matching with regexes
     int maxNumMatchedChars = 0;
     enum tokenEnumType term;
-    char* lex;
+    std::string lex;
     
     while ( text[0] != '\0' ) {
       maxNumMatchedChars = 0 ;
@@ -290,15 +290,12 @@ Token* scanner(const char* text){
 	  numMatchedChars = matchRegex (intKwdReg, text) ;
 	  if (numMatchedChars > maxNumMatchedChars) {
 	    maxNumMatchedChars = numMatchedChars ;
-
-	    /*
-	    // initialize a char array that holds the matched characters and copy
-	    char lexeme[maxNumMatchedChars+1];
-	    strcpy(lexeme,text,maxNumMatchedChars);
-	    */
-
 	    term = intKwd;
-	    lex = strncpy(lex, text, maxNumMatchedChars);
+      // initialize a char array that holds the matched characters and copy
+      char* data;
+      data = strncpy(data, text, maxNumMatchedChars);
+      std::string tempLex(data);
+	    lex = tempLex;
 	  }
      
 	  Token *current;
