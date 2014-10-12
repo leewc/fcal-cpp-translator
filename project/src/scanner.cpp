@@ -10,11 +10,10 @@ copy of the original text (terminal), what type of token it is
 
 
 //included the string header or else C++ doesn't support strings
-#include <string>
+#include <string.h>
 
 #include "scanner.h"
 #include "regex.h"
-#include "regex.cpp"
 
 
 //placed on top or else scan cannot find it
@@ -45,7 +44,7 @@ int consumeWhiteSpace(regex_t *whiteSpace,
 /*scanner will take in text in the form of char*s and return a
 pointer to the top of the list.
 */
-Token* Scanner::scan(const char* text){
+Token* scanner(const char* text){
     Token* head;
     
     //first make all the regexes for each token type
@@ -280,7 +279,7 @@ Token* Scanner::scan(const char* text){
     //try matching with regexes
     int maxNumMatchedChars = 0;
     enum tokenEnumType term;
-    std::string lex;
+    char* lex;
     
     while ( text[0] != '\0' ) {
       maxNumMatchedChars = 0 ;
@@ -291,15 +290,19 @@ Token* Scanner::scan(const char* text){
 	  numMatchedChars = matchRegex (intKwdReg, text) ;
 	  if (numMatchedChars > maxNumMatchedChars) {
 	    maxNumMatchedChars = numMatchedChars ;
+
+	    /*
+	    // initialize a char array that holds the matched characters and copy
+	    char lexeme[maxNumMatchedChars+1];
+	    strcpy(lexeme,text,maxNumMatchedChars);
+	    */
+
 	    term = intKwd;
-      // initialize a char array that holds the matched characters and copy
-      char* data;
-      data = strncpy(data, text, maxNumMatchedChars);
-      std::string tempLex(data);
-	    lex = tempLex;
+	    lex = strncpy(lex, text, maxNumMatchedChars);
 	  }
      
 	  Token *current;
+	  Token aToken = Token (term, lex, NULL);
 
 	  //an example of making an intKwd, snce we have an array of regex, we can have an array of strings that correspond to the array of regexes (e.g. regArray[0] is intKwdreg and strArray[0] is intKwdReg, then put it all in a for loop, hopefully? 
 	  //	  Token aToken = Token("intKwd", lex, NULL);
