@@ -2,11 +2,9 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
-#include <regex.h>
 #include <string>
-
-
-
+#include "regex.h"
+#include <regex.h>
 /* This enumerated type is used to keep track of what kind of
    construct was matched. 
  */
