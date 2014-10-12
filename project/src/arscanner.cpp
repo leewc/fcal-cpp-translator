@@ -12,7 +12,7 @@ copy of the original text (terminal), what type of token it is
 //included the string header or else C++ doesn't support strings
 #include <string.h>
 
-#include "scanner.h"
+#include "arscanner.h"
 #include "regex.h"
 
 
@@ -297,14 +297,14 @@ Token* scanner(const char* text){
 	    strcpy(lexeme,text,maxNumMatchedChars);
 	    */
 
-	    term = intKwd;
+	    //term = intKwd;
 	    lex = strncpy(lex, text, maxNumMatchedChars);
 	  }
      
 	  Token *current;
 
 	  //an example of making an intKwd, snce we have an array of regex, we can have an array of strings that correspond to the array of regexes (e.g. regArray[0] is intKwdreg and strArray[0] is intKwdReg, then put it all in a for loop, hopefully? 
-	  //	  Token aToken = Token("intKwd", lex, NULL);
+	  Token aToken = Token("intKwd", lex, NULL);
 	  if(head == NULL) {
 	    head = &aToken;
 	    current = head;
