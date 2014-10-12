@@ -16,9 +16,9 @@ copy of the original text (terminal), what type of token it is
 #include "regex.h"
 
 
-//placed on top or else scan cannot find it
-//copied from WordCount, adapted to not consume comments
-int consumeWhiteSpace(regex_t *whiteSpace, 
+int consumeWhiteSpaceAndComments (regex_t *whiteSpace, 
+                                  regex_t *blockComment, 
+				  regex_t *lineComment,
                                   const char *text) {
   int numMatchedChars = 0 ;
   int totalNumMatchedChars = 0 ;
@@ -26,8 +26,25 @@ int consumeWhiteSpace(regex_t *whiteSpace,
 
   do {
     stillConsumingWhiteSpace = 0 ;  // exit loop if not reset by a match
+
     // Try to match white space
     numMatchedChars = matchRegex (whiteSpace, text) ;
+    totalNumMatchedChars += numMatchedChars ;
+    if (numMatchedChars > 0) {
+      text = text + numMatchedChars ;
+      stillConsumingWhiteSpace = 1 ;
+    }
+
+    // Try to match block comments
+    numMatchedChars = matchRegex (blockComment, text) ;
+    totalNumMatchedChars += numMatchedChars ;
+    if (numMatchedChars > 0) {
+      text = text + numMatchedChars ;
+      stillConsumingWhiteSpace = 1 ;
+    }
+
+    // Try to match single-line comments
+    numMatchedChars = matchRegex (lineComment, text) ;
     totalNumMatchedChars += numMatchedChars ;
     if (numMatchedChars > 0) {
       text = text + numMatchedChars ;
@@ -51,8 +68,7 @@ Token* scanner(const char* text){
     regex_t* regArray[42];
 
     tokenType* tokenArray[42];
-    tokenType t;
-
+ 
     int a = 0; //tracker for array 
     
     //whitespace should not be in the array
@@ -273,7 +289,7 @@ Token* scanner(const char* text){
     //now start looking at the text
     int numMatchedChars = 0;
     //skip any initial whitespace
-    numMatchedChars = consumeWhiteSpace(whiteSpace, text);
+    numMatchedChars = consumeWhiteSpace(whiteSpace, blockCommentReg, lineCommentReg, text);
     text = text + numMatchedChars;
 
     //try matching with regexes
