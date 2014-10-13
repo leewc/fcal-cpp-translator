@@ -1,99 +1,90 @@
 /*Scanner will read in text and output a linked list of tokens
 based on what was in the text. Each token will contain a string
-copy of the original text (terminal), what type of token it is 
+copy of the original text (terminal), what type of token it is
 (tokenType), and a pointer to the next token in the list (next).
 */
 
 #include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
-
-
-
-//included the string header or else C++ doesn't support strings
-#include <string.h>
-
-#include "scanner.h"
+#include <string>
 #include "regex.h"
+#include "scanner.h"
 
 
-int consumeWhiteSpaceAndComments (regex_t *whiteSpace, 
-                                  regex_t *blockComment, 
-				  regex_t *lineComment,
-                                  const char *text) {
-  int numMatchedChars = 0 ;
-  int totalNumMatchedChars = 0 ;
-  int stillConsumingWhiteSpace ;
-
-  do {
-    stillConsumingWhiteSpace = 0 ;  // exit loop if not reset by a match
-
-    // Try to match white space
-    numMatchedChars = matchRegex (whiteSpace, text) ;
-    totalNumMatchedChars += numMatchedChars ;
-    if (numMatchedChars > 0) {
-      text = text + numMatchedChars ;
-      stillConsumingWhiteSpace = 1 ;
-    }
-
-    // Try to match block comments
-    numMatchedChars = matchRegex (blockComment, text) ;
-    totalNumMatchedChars += numMatchedChars ;
-    if (numMatchedChars > 0) {
-      text = text + numMatchedChars ;
-      stillConsumingWhiteSpace = 1 ;
-    }
-
-    // Try to match single-line comments
-    numMatchedChars = matchRegex (lineComment, text) ;
-    totalNumMatchedChars += numMatchedChars ;
-    if (numMatchedChars > 0) {
-      text = text + numMatchedChars ;
-      stillConsumingWhiteSpace = 1 ;
-    }
-  }
-  while ( stillConsumingWhiteSpace ) ;    
-
-  return totalNumMatchedChars ;
+//Token constructor
+Token::Token(tokenType inTerm, std::string inLex, Token* inNext){
+	terminal = inTerm;
+	lexeme = inLex;
+	next = inNext;
 }
 
+int Scanner::consumeWhiteSpaceAndComments(regex_t *whiteSpace,
+								regex_t *blockComment,
+								regex_t *lineComment,
+								const char *text) {
+	int numMatchedChars = 0 ;
+	int totalNumMatchedChars = 0 ;
+	int stillConsumingWhiteSpace ;
 
+	do {
+		stillConsumingWhiteSpace = 0 ; // exit loop if not reset by a match
 
-/*scanner will take in text in the form of char*s and return a
-pointer to the top of the list.
-*/
-Token* scanner(const char* text){
-    Token* head;
+		// Try to match white space
+		numMatchedChars = matchRegex (whiteSpace, text) ;
+		totalNumMatchedChars += numMatchedChars ;
+		if (numMatchedChars > 0) {
+			text = text + numMatchedChars ;
+			stillConsumingWhiteSpace = 1 ;
+		}
+
+		// Try to match block comments
+		numMatchedChars = matchRegex (blockComment, text) ;
+		totalNumMatchedChars += numMatchedChars ;
+		if (numMatchedChars > 0) {
+			text = text + numMatchedChars ;
+			stillConsumingWhiteSpace = 1 ;
+		}
+
+		// Try to match single-line comments
+		numMatchedChars = matchRegex (lineComment, text) ;
+		totalNumMatchedChars += numMatchedChars ;
+		if (numMatchedChars > 0) {
+			text = text + numMatchedChars ;
+			stillConsumingWhiteSpace = 1 ;
+		}
+	}
+	while ( stillConsumingWhiteSpace ) ;
+
+	return totalNumMatchedChars ;
+}
+
+Token* Scanner::scan(const char* text){
     
     //first make all the regexes for each token type
     regex_t* regArray[42];
 
     tokenType* tokenArray[42];
  
-    int a = 0; //tracker for array 
+    int a = 0; //tracker for array
     
-    //whitespace should not be in the array
     regex_t* whiteSpace ;
     whiteSpace = makeRegex ("^[\n\t\r ]+") ;
-    
-    //We don't need block or line comment regexes. 
-    //TODO: we need these REGEXes: variableName, lexicalError, endOfFile (note: also modify constructor).
+
     regex_t* blockCommentReg ;
-    blockCommentReg = makeRegex ("^/\\*([^\\*]|\\*+[^\\*/])*\\*+/"); 
-    regArray[a] = blockCommentReg;
-    a++;
+    blockCommentReg = makeRegex ("^/\\*([^\\*]|\\*+[^\\*/])*\\*+/");
     
     regex_t* lineCommentReg ;
     lineCommentReg = makeRegex ("^//[^\n]*\n");
-    regArray[a] = lineCommentReg;
-    a++;
-        
+	
+    //TODO: we need these REGEXes: variableName, lexicalError, endOfFile (note: also modify constructor).
     //Constants: Begin
     regex_t* stringConstReg ;
-    stringConstReg = makeRegex ("\"^([a-z0-9A-Z]+)\"") ;
+    stringConstReg = makeRegex ("^\"([a-z0-9A-Z]+)\"") ;
     regArray[a] = stringConstReg;
     a++;
 
-    regex_t* intConstReg; 
+    regex_t* intConstReg;
     intConstReg = makeRegex("^[0-9]*");
     regArray[a] = intConstReg;
     a++;
@@ -157,7 +148,7 @@ Token* scanner(const char* text){
     a++;
 
     regex_t* floatKwdReg;
-    floatKwdReg =  makeRegex("^float");
+    floatKwdReg = makeRegex("^float");
     regArray[a] = floatKwdReg;
     a++;
 
@@ -165,7 +156,7 @@ Token* scanner(const char* text){
     stringKwdReg = makeRegex("^string");
     regArray[a] = stringKwdReg;
     a++;
-	
+
     regex_t* matrixKwdReg;
     matrixKwdReg = makeRegex("^matrix");
     regArray[a] = matrixKwdReg;
@@ -200,7 +191,7 @@ Token* scanner(const char* text){
     elseKwdReg = makeRegex("^else");
     regArray[a] = elseKwdReg;
     a++;
-	
+
     regex_t* forKwdReg;
     forKwdReg = makeRegex("^for");
     regArray[a] = forKwdReg;	
@@ -216,7 +207,7 @@ Token* scanner(const char* text){
     regArray[a] = printKwdReg;	
     a++;
 
-    regex_t*  assignReg;
+    regex_t* assignReg;
     assignReg = makeRegex("^=");
     regArray[a] = assignReg;	
     a++;
@@ -266,9 +257,9 @@ Token* scanner(const char* text){
     regArray[a] = equalsEqualsReg;	
     a++;
 
-    regex_t* notEqualReg;
-    notEqualReg = makeRegex("^!=");
-    regArray[a] = notEqualReg;	
+    regex_t* notEqualsReg;
+    notEqualsReg = makeRegex("^!=");
+    regArray[a] = notEqualsReg;	
     a++;
 
     regex_t* andOpReg;
@@ -285,54 +276,304 @@ Token* scanner(const char* text){
     notOpReg = makeRegex("^!");
     regArray[a] = notOpReg;
     a++;
-
-    //now start looking at the text
+	
+	Token* head =NULL;
+	//now start looking at the text
     int numMatchedChars = 0;
+	
     //skip any initial whitespace
-    numMatchedChars = consumeWhiteSpace(whiteSpace, blockCommentReg, lineCommentReg, text);
+    numMatchedChars = consumeWhiteSpaceAndComments(whiteSpace, blockCommentReg, lineCommentReg, text);
     text = text + numMatchedChars;
 
     //try matching with regexes
     int maxNumMatchedChars = 0;
     enum tokenEnumType term;
-    char* lex;
-    
-    while ( text[0] != '\0' ) {
-      maxNumMatchedChars = 0 ;
-      term = lexicalError;
-
-      //We have no way of setting term when using the array, so I'm going the long way for now.
+    std::string lex;
+	while ( text[0] != '\0' ) {
+		maxNumMatchedChars = 0 ;
+		term = lexicalError;
+		
+				numMatchedChars = matchRegex (intKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = intKwd;
+			lex.assign(text,numMatchedChars); 
       
-	  numMatchedChars = matchRegex (intKwdReg, text) ;
-	  if (numMatchedChars > maxNumMatchedChars) {
-	    maxNumMatchedChars = numMatchedChars ;
+      std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (stringConstReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = stringConst;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (intConstReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = intConst;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (floatConstReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = floatConst;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (floatKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = floatKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (stringKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = stringKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (matrixKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = matrixKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (letKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = letKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (inKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = inKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (endKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = endKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (ifKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = ifKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (thenKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = thenKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (elseKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = elseKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (forKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = forKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (whileKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = whileKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (printKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = printKwd;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (leftParenReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = leftParen;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (rightParenReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = rightParen;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (leftCurlyReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = leftCurly;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (rightCurlyReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = rightCurly;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (leftSquareReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = leftSquare;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (rightSquareReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = rightSquare;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (commaReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = comma;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (semiColonReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = semiColon;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (colonReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = colon;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (assignReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = assign;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (plusSignReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = plusSign;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (starReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = star;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (dashReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = dash;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (forwardSlashReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = forwardSlash;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (lessThanReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = lessThan;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (lessThanEqualReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = lessThanEqual;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (greaterThanReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = greaterThan;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (greaterThanEqualReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = greaterThanEqual;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (equalsEqualsReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = equalsEquals;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (notEqualsReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = notEquals;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (andOpReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = andOp;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (orOpReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = orOp;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		numMatchedChars = matchRegex (notOpReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = notOp;
+			lex.assign(text,numMatchedChars); std::cout<<"Found match. term is "<<term<<" lex is "<<lex;
+		}
+		
+		
+		//Token *current;
+		//Token aToken = Token (term, lex, NULL);
 
-	    /*
-	    // initialize a char array that holds the matched characters and copy
-	    char lexeme[maxNumMatchedChars+1];
-	    strcpy(lexeme,text,maxNumMatchedChars);
-	    */
-
-	    term = intKwd;
-	    lex = strncpy(lex, text, maxNumMatchedChars);
-	  }
-     
-	  Token *current;
-	  Token aToken = Token (term, lex, NULL);
-
-	  //an example of making an intKwd, snce we have an array of regex, we can have an array of strings that correspond to the array of regexes (e.g. regArray[0] is intKwdreg and strArray[0] is intKwdReg, then put it all in a for loop, hopefully? 
-	  //	  Token aToken = Token("intKwd", lex, NULL);
-	  if(head == NULL) {
-	    head = &aToken;
-	    current = head;
-	  }
-	  else {
-	    current->next = &aToken;
-	    current = current->next;
-	  }
-	  text = text + numMatchedChars;
-    }
-
-    return head;
-
+		//an example of making an intKwd, snce we have an array of regex, we can have an array of strings that correspond to the array of regexes (e.g. regArray[0] is intKwdreg and strArray[0] is intKwdReg, then put it all in a for loop, hopefully?
+   if(term == lexicalError){
+   lex.assign(text,1);
+			text = text + 1;
+		}
+		else{
+			text = text + maxNumMatchedChars;
+		}
+   
+		if(head == NULL) {
+    Token temp (term, lex, NULL);//= (Token*)malloc(sizeof(Token));
+      head = &temp;
+		}
+		else {
+		Token *current;// = (Token*)malloc(sizeof(Token));
+   current = head;
+   while(current->next!=NULL){
+   current = current->next;
+   }
+   Token temp (term, lex, NULL);//= (Token*)malloc(sizeof(Token));
+   current->next = &temp;
+   }
+		
+		
+		numMatchedChars = consumeWhiteSpaceAndComments(whiteSpace, blockCommentReg, lineCommentReg, text);
+		text = text + numMatchedChars;
+	}
+ if(head == NULL){
+ Token temp (endOfFile, "\0", NULL);//= (Token*)malloc(sizeof(Token));
+ head = &temp;
+ //head->terminal = endOfFile;
+ }
+ else {
+ Token *lastToken;// = (Token*)malloc(sizeof(Token));
+ lastToken = head;
+ while(lastToken->next!=NULL){
+ lastToken = lastToken->next;
+ }
+ Token temp (endOfFile, "\0", NULL);// = (Token*)malloc(sizeof(Token));
+   lastToken->next = &temp;
+   }
+	return head;
 }
