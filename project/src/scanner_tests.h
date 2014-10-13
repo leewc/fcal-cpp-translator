@@ -225,6 +225,13 @@ class ScannerTestSuite : public CxxTest::TestSuite
     scanFileNoLexicalErrors ("../samples/forest_loss_v2.dsl") ;
   }
   
-      
+  void test_terminal_intKwd () {
+    Token *tks = s-> scan("  Int");
+    TS_ASSERT (tks != NULL) ;
+    tokenType ts[] = { intKwd,endOfFile } ;
+    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+
+  }
+   
 
 } ;
