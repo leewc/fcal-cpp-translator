@@ -87,12 +87,12 @@ Token* Scanner::scan(const char* text){
     //TODO: we need these REGEXes: variableName, lexicalError, endOfFile (note: also modify constructor).
     //Constants: Begin
     regex_t* stringConstReg ;
-    stringConstReg = makeRegex ("^\"([a-z0-9A-Z]+)\"") ;
+    stringConstReg = makeRegex ("^\"([a-z0-9A-Z\\_\\-]+)\"") ;
     regArray[a] = stringConstReg;
     a++;
 
     regex_t* intConstReg;
-    intConstReg = makeRegex("^[0-9]*");
+    intConstReg = makeRegex("^[0-9]+");
     regArray[a] = intConstReg;
     a++;
 
@@ -104,7 +104,7 @@ Token* Scanner::scan(const char* text){
     //Constants: End
         
     regex_t* variableNameReg ;
-    variableNameReg = makeRegex("^([a-z][A-Z])+[0-9]*[a-zA-z]*");
+    variableNameReg = makeRegex("^([a-zA-Z])+[0-9a-zA-z]*");
     regArray[a] = variableNameReg;
     a++;
 
@@ -125,7 +125,7 @@ Token* Scanner::scan(const char* text){
     a++;
 
     regex_t* rightCurlyReg;
-    rightCurlyReg = makeRegex ("^\\{");
+    rightCurlyReg = makeRegex ("^\\}");
     regArray[a] = rightCurlyReg;
     a++;
 
@@ -155,22 +155,23 @@ Token* Scanner::scan(const char* text){
     a++;
 
     regex_t* intKwdReg;
-    intKwdReg = makeRegex("^int");
+    //FCAL types begin with capital
+    intKwdReg = makeRegex("^Int");
     regArray[a] = intKwdReg;	
     a++;
 
     regex_t* floatKwdReg;
-    floatKwdReg = makeRegex("^float");
+    floatKwdReg = makeRegex("^Float");
     regArray[a] = floatKwdReg;
     a++;
 
     regex_t* stringKwdReg;
-    stringKwdReg = makeRegex("^string");
+    stringKwdReg = makeRegex("^Str");
     regArray[a] = stringKwdReg;
     a++;
 
     regex_t* matrixKwdReg;
-    matrixKwdReg = makeRegex("^matrix");
+    matrixKwdReg = makeRegex("^Matrix");
     regArray[a] = matrixKwdReg;
     a++;
 
@@ -250,7 +251,7 @@ Token* Scanner::scan(const char* text){
     a++;
 
     regex_t* lessThanEqualReg;
-    lessThanEqualReg = makeRegex("^\\<=");
+    lessThanEqualReg = makeRegex("^<=");
     regArray[a] = lessThanEqualReg;	
     a++;
 
@@ -260,7 +261,8 @@ Token* Scanner::scan(const char* text){
     a++;
 
     regex_t* greaterThanEqualReg;
-    greaterThanEqualReg = makeRegex("^\\>=");
+    //previous regex was ^//>= which is wrong based on the forest bad syn good tokens test (same for <=)
+    greaterThanEqualReg = makeRegex("^>=");
     regArray[a] = greaterThanEqualReg;	
     a++;
 
@@ -307,12 +309,6 @@ Token* Scanner::scan(const char* text){
 		term = lexicalError;
 		
 		
-		numMatchedChars = matchRegex (variableNameReg, text);
-		if (numMatchedChars > maxNumMatchedChars) {
-			maxNumMatchedChars = numMatchedChars ;
-			term = variableName;
-			std::cout<<"Found match. term is varName"<<term<<std::endl;
-		}
 
 		numMatchedChars = matchRegex (intKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
@@ -325,12 +321,6 @@ Token* Scanner::scan(const char* text){
 			maxNumMatchedChars = numMatchedChars ;
 			term = stringConst;
 			std::cout<<"Found match. term is strconst"<<std::endl;
-		}
-		numMatchedChars = matchRegex (intConstReg, text);
-		if (numMatchedChars > maxNumMatchedChars) {
-			maxNumMatchedChars = numMatchedChars ;
-			term = intConst;
-			std::cout<<"Found match. term is intconst"<<std::endl;
 		}
 		numMatchedChars = matchRegex (floatConstReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
@@ -355,6 +345,12 @@ Token* Scanner::scan(const char* text){
 			maxNumMatchedChars = numMatchedChars ;
 			term = matrixKwd;
 			std::cout<<"Found match. term is matrixkwd"<<std::endl;
+		}
+		numMatchedChars = matchRegex (intConstReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = intConst;
+			std::cout<<"Found match. term is intconst " <<std::endl;
 		}
 		numMatchedChars = matchRegex (letKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
@@ -410,6 +406,14 @@ Token* Scanner::scan(const char* text){
 			term = printKwd;
 			std::cout<<"Found match. term is printKwd"<<term<<std::endl;
 		}
+
+		numMatchedChars = matchRegex (variableNameReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = variableName;
+			std::cout<<"Found match. term is varName"<<term<<std::endl;
+		}
+
 		numMatchedChars = matchRegex (leftParenReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
@@ -572,7 +576,6 @@ Token* Scanner::scan(const char* text){
 		text = text + maxNumMatchedChars;
 		numMatchedChars = consumeWhiteSpaceAndComments(whiteSpace, blockCommentReg, lineCommentReg, text);
 		text = text + numMatchedChars;
-		std::cout << "remaining text:" <<text <<std::endl;
 	}
 	//set end of file node
 	std::string lex;
