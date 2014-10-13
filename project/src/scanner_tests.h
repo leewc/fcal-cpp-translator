@@ -147,7 +147,7 @@ public:
     // When a lexical error occurs, the scanner creates a token with a 
     // single-character lexeme and lexicalError as the terminal.
    void test_scan_lexicalErrors ( ) {
-        Token *tks = s->scan ("int$&1  ") ;
+        Token *tks = s->scan ("$&1  ") ;
         TS_ASSERT (tks != NULL) ;
         TS_ASSERT_EQUALS (tks->terminal, lexicalError) ;
         TS_ASSERT_EQUALS (tks->lexeme, "$");

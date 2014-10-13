@@ -48,7 +48,9 @@ class Token { //Can add more fields later
 	tokenType terminal;
 	std::string lexeme;
 	Token* next;
+  Token(tokenType, const char*, int, Token*);
 	Token(tokenType, std::string, Token*);
+ Token();
 };
 
 /*/Token constructor
