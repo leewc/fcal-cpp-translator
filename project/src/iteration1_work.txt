@@ -1,0 +1,26 @@
+Division of Labor Statement for Iteration 1
+
+Work Done Jointly
+1. Designing the Scanner 
+- The initial planning and design of how the scan method takes in a string input and then outputs a linked list of tokens was done together in the purposed meeting times. The planning and design of the scanner was done by inspecting the given files such as the tokenTypes as well as the test cases. (The result of this was in the commit of 'Started outline of scanner.cpp'
+
+2. Sophia laid down the initial outline of the scanner after agreeing on the requirements on paper, as well as the token fields.
+
+3. We then both created the required regular expressions to match the text (done separately on different computers then merged) and this was also checked later by both teammates for errorenous ones which are found and fixed via test cases.
+
+4. After creating a regular expression for each token (except EndOfFile and LexicalError) we preceded to implement other functions that get rid of whitespace and comments which allow for the scanner to advance properly.
+
+5. We then decided on what else was needed to be done and set a deadline to get certain functionalities working.
+
+Work Done Separately
+1. Sophia implemented the bulk of matching the words and creating the proper tokens.
+2. Lee ensured that consumeWhiteSpaceAndComments works properly, as well as the test cases.
+3. Sophia implemented the linked list, which was a major part of this iteration.
+4. Lee debugged certain parts of the program, namely the infinite loops caused from not allocating memory to tokens right (see GitHub)
+5. Sophia also debugged as well and managed to resolve the infinite loop.
+6. Lee then preceeded to debug the scan method as it did not pass the given test cases, only a few errors were found and all was well.
+
+The remaining tokens test cases were written by Sophia, as well as fixing some remaining regex errors, whilst Lee prepared this division of labor statement.
+
+Most of the time consuming instances of this project was spent on fixing the infinite loop as well as implementing the token creation and regex array. The regex array was not able to be implemented for this iteration. When debugging the scanner file we had to fall back to an older version stored in Git as well as merge some conflicts due to having different local commits compared to the master.
+
