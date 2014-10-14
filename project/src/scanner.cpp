@@ -246,7 +246,7 @@ Token* Scanner::scan(const char* text){
     a++;
 
     regex_t* lessThanReg;
-    lessThanReg = makeRegex("^\\<");
+    lessThanReg = makeRegex("^<");
     regArray[a] = lessThanReg;	
     a++;
 
@@ -256,7 +256,7 @@ Token* Scanner::scan(const char* text){
     a++;
 
     regex_t* greaterThanReg;
-    greaterThanReg = makeRegex("^\\>");
+    greaterThanReg = makeRegex("^>");
     regArray[a] = greaterThanReg;	
     a++;
 
@@ -314,246 +314,246 @@ Token* Scanner::scan(const char* text){
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = intKwd;
-			std::cout<<"Found match. term is intkwd"<<std::endl;
+			//std::cout<<"Found match. term is intkwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (stringConstReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = stringConst;
-			std::cout<<"Found match. term is strconst"<<std::endl;
+			//std::cout<<"Found match. term is strconst"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (floatConstReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = floatConst;
-			std::cout<<"Found match. term is floatconst"<<std::endl;
+			//std::cout<<"Found match. term is floatconst"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (floatKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = floatKwd;
-			std::cout<<"Found match. term is floatkwd"<<std::endl;
+			//std::cout<<"Found match. term is floatkwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (stringKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = stringKwd;
-			std::cout<<"Found match. term is stringkwd"<<std::endl;
+			//std::cout<<"Found match. term is stringkwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (matrixKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = matrixKwd;
-			std::cout<<"Found match. term is matrixkwd"<<std::endl;
+			//std::cout<<"Found match. term is matrixkwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (intConstReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = intConst;
-			std::cout<<"Found match. term is intconst " <<std::endl;
+			//std::cout<<"Found match. term is intconst " <<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (letKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = letKwd;
-			std::cout<<"Found match. term is letkwd"<<std::endl;
+			//std::cout<<"Found match. term is letkwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (inKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = inKwd;
-			std::cout<<"Found match. term is INkwd"<<std::endl;
+			//std::cout<<"Found match. term is INkwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (endKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = endKwd;
-			std::cout<<"Found match. term is endKwd"<<term<<std::endl;
+			//std::cout<<"Found match. term is endKwd"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (ifKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = ifKwd;
-			std::cout<<"Found match. term is ifKwd"<<term<<std::endl;
+			//std::cout<<"Found match. term is ifKwd"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (thenKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = thenKwd;
-			std::cout<<"Found match. term is thenKwd"<<term<<std::endl;
+			//std::cout<<"Found match. term is thenKwd"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (elseKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = elseKwd;
-			std::cout<<"Found match. term is elseKwd"<<term<<std::endl;
+			//std::cout<<"Found match. term is elseKwd"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (forKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = forKwd;
-			std::cout<<"Found match. term is forKwd"<<term<<std::endl;
+			//std::cout<<"Found match. term is forKwd"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (whileKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = whileKwd;
-			std::cout<<"Found match. term is whileKwd"<<term<<std::endl;
+			//std::cout<<"Found match. term is whileKwd"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (printKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = printKwd;
-			std::cout<<"Found match. term is printKwd"<<term<<std::endl;
-		}
-
-		numMatchedChars = matchRegex (variableNameReg, text);
-		if (numMatchedChars > maxNumMatchedChars) {
-			maxNumMatchedChars = numMatchedChars ;
-			term = variableName;
-			std::cout<<"Found match. term is varName"<<term<<std::endl;
+			//std::cout<<"Found match. term is printKwd"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 
 		numMatchedChars = matchRegex (leftParenReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = leftParen;
-			std::cout<<"Found match. term is leftparen"<<term<<std::endl;
+			//std::cout<<"Found match. term is leftparen"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (rightParenReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = rightParen;
-			std::cout<<"Found match. term is rightParen"<<term<<std::endl;
+			//std::cout<<"Found match. term is rightParen"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (leftCurlyReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = leftCurly;
-			std::cout<<"Found match. term is leftCurl"<<term<<std::endl;
+			//std::cout<<"Found match. term is leftCurl"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (rightCurlyReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = rightCurly;
-			std::cout<<"Found match. term is rightCurl"<<term<<std::endl;
+			//std::cout<<"Found match. term is rightCurl"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (leftSquareReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = leftSquare;
-			std::cout<<"Found match. term is leftSquare"<<term<<std::endl;
+			//std::cout<<"Found match. term is leftSquare"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (rightSquareReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = rightSquare;
-			std::cout<<"Found match. term is rightSquare"<<term<<std::endl;
+			//std::cout<<"Found match. term is rightSquare"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (commaReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = comma;
-			std::cout<<"Found match. term is comma"<<term<<std::endl;
+			//std::cout<<"Found match. term is comma"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (semiColonReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = semiColon;
-			std::cout<<"Found match. term is semicolon"<<term<<std::endl;
+			//std::cout<<"Found match. term is semicolon"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (colonReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = colon;
-			std::cout<<"Found match. term is colon"<<term<<std::endl;
+			//std::cout<<"Found match. term is colon"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (assignReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = assign;
-			std::cout<<"Found match. term is assign"<<term<<std::endl;
+			//std::cout<<"Found match. term is assign"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (plusSignReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = plusSign;
-			std::cout<<"Found match. term is plus"<<term<<std::endl;
+			//std::cout<<"Found match. term is plus"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (starReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = star;
-			std::cout<<"Found match. term is star"<<term<<std::endl;
+			//std::cout<<"Found match. term is star"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (dashReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = dash;
-			std::cout<<"Found match. term is dash"<<term<<std::endl;
+			//std::cout<<"Found match. term is dash"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (forwardSlashReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = forwardSlash;
-			std::cout<<"Found match. term is forwardslash"<<term<<std::endl;
+			//std::cout<<"Found match. term is forwardslash"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (lessThanReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = lessThan;
-			std::cout<<"Found match. term is lessthan"<<term<<std::endl;
+			//std::cout<<"Found match. term is lessthan"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (lessThanEqualReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = lessThanEqual;
-			std::cout<<"Found match. term is lessthanEQ"<<term<<std::endl;
+			//std::cout<<"Found match. term is lessthanEQ"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (greaterThanReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = greaterThan;
-			std::cout<<"Found match. term is greaterthan"<<term<<std::endl;
+			//std::cout<<"Found match. term is greaterthan"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (greaterThanEqualReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = greaterThanEqual;
-			std::cout<<"Found match. term is greaterthanEQ"<<term<<std::endl;
+			//std::cout<<"Found match. term is greaterthanEQ"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (equalsEqualsReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = equalsEquals;
-			std::cout<<"Found match. term is EQEQ"<<term<<std::endl;
+			//std::cout<<"Found match. term is EQEQ"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (notEqualsReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = notEquals;
-			std::cout<<"Found match. term is notEQ"<<term<<std::endl;
+			//std::cout<<"Found match. term is notEQ"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (andOpReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = andOp;
-			std::cout<<"Found match. term is andOP"<<term<<std::endl;
+			//std::cout<<"Found match. term is andOP"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (orOpReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = orOp;
-			std::cout<<"Found match. term is orOP"<<term<<std::endl;
+			//std::cout<<"Found match. term is orOP"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (notOpReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = notOp;
-			std::cout<<"Found match. term is notOP "<<term<<std::endl;
+			//std::cout<<"Found match. term is notOP "<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
+		}
+   
+   numMatchedChars = matchRegex (variableNameReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = variableName;
+			//std::cout<<"Found match. term is varName"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 
-		
+		//printf("done matching\n");
 		if(term == lexicalError){
 			maxNumMatchedChars = 1;
 		}
