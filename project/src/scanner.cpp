@@ -69,11 +69,11 @@ int Scanner::consumeWhiteSpaceAndComments(regex_t *whiteSpace,
 Token* Scanner::scan(const char* text){
     
     //first make all the regexes for each token type
-    regex_t* regArray[42];
+  //    regex_t* regArray[42];
 
-    tokenType* tokenArray[42];
+  //tokenType* tokenArray[42];
  
-    int a = 0; //tracker for array
+  //int a = 0; //tracker for array
     
     regex_t* whiteSpace ;
     whiteSpace = makeRegex ("^[\n\t\r ]+") ;
@@ -84,212 +84,214 @@ Token* Scanner::scan(const char* text){
     regex_t* lineCommentReg ;
     lineCommentReg = makeRegex ("^//[^\n]*\n");
 	
-    //TODO: we need these REGEXes: variableName, lexicalError, endOfFile (note: also modify constructor).
     //Constants: Begin
     regex_t* stringConstReg ;
-    stringConstReg = makeRegex ("^\"([a-z0-9A-Z\\_\\-]+)\"") ;
-    regArray[a] = stringConstReg;
-    a++;
+    //stringConstReg = makeRegex ("^\"([a-z0-9A-Z\\_\\-]+)\"") ;
+    // the below regex handles everything between the quotes even internal quotes -->//
+    stringConstReg = makeRegex("^\"([^\"]|(\\\\\"))*\"");
+    //stringConstReg = makeRegex("^\".*\"");
+    //regArray[a] = stringConstReg;
+    //a++;
 
     regex_t* intConstReg;
     intConstReg = makeRegex("^[0-9]+");
-    regArray[a] = intConstReg;
-    a++;
+    //regArray[a] = intConstReg;
+    //a++;
 
     regex_t* floatConstReg ;
 
     floatConstReg = makeRegex ("^[0-9]+\\.[0-9]*");
-    regArray[a] = floatConstReg;
-    a++;
+    //regArray[a] = floatConstReg;
+    //a++;
     //Constants: End
         
     regex_t* variableNameReg ;
     variableNameReg = makeRegex("^([a-zA-Z])+[0-9a-zA-z]*");
-    regArray[a] = variableNameReg;
-    a++;
+    //regArray[a] = variableNameReg;
+    //a++;
 
     //Punctuation: Begin
     regex_t* leftParenReg;
     leftParenReg = makeRegex ("^\\(");
-    regArray[a] = leftParenReg;
-    a++;
+    //regArray[a] = leftParenReg;
+    //a++;
 
     regex_t* rightParenReg;
     rightParenReg = makeRegex ("^\\)");
-    regArray[a] = rightParenReg;
-    a++;
+    //regArray[a] = rightParenReg;
+    //a++;
 
     regex_t* leftCurlyReg;
     leftCurlyReg = makeRegex ("^\\{");
-    regArray[a] = leftCurlyReg;
-    a++;
+    //regArray[a] = leftCurlyReg;
+    //a++;
 
     regex_t* rightCurlyReg;
     rightCurlyReg = makeRegex ("^\\}");
-    regArray[a] = rightCurlyReg;
-    a++;
+    //regArray[a] = rightCurlyReg;
+    //a++;
 
     regex_t* leftSquareReg;
     leftSquareReg = makeRegex ("^\\[");
-    regArray[a] = leftSquareReg;
-    a++;
+    //regArray[a] = leftSquareReg;
+    //a++;
 
     regex_t* rightSquareReg;
     rightSquareReg = makeRegex ("^\\]");
-    regArray[a] = rightSquareReg;
-    a++;
+    //regArray[a] = rightSquareReg;
+    //a++;
 
     regex_t* commaReg;
     commaReg = makeRegex ("^,");
-    regArray[a] = commaReg;
-    a++;
+    //regArray[a] = commaReg;
+    //a++;
 
     regex_t* semiColonReg;
     semiColonReg = makeRegex ("^;");
-    regArray[a] = semiColonReg;
-    a++;
+    //regArray[a] = semiColonReg;
+    //a++;
 
     regex_t* colonReg;
     colonReg = makeRegex ("^:");
-    regArray[a] = colonReg;
-    a++;
+    //regArray[a] = colonReg;
+    //a++;
 
     regex_t* intKwdReg;
     //FCAL types begin with capital
     intKwdReg = makeRegex("^Int");
-    regArray[a] = intKwdReg;	
-    a++;
+    //regArray[a] = intKwdReg;	
+    //a++;
 
     regex_t* floatKwdReg;
     floatKwdReg = makeRegex("^Float");
-    regArray[a] = floatKwdReg;
-    a++;
+    //regArray[a] = floatKwdReg;
+    //a++;
 
     regex_t* stringKwdReg;
     stringKwdReg = makeRegex("^Str");
-    regArray[a] = stringKwdReg;
-    a++;
+    //regArray[a] = stringKwdReg;
+    //a++;
 
     regex_t* matrixKwdReg;
     matrixKwdReg = makeRegex("^Matrix");
-    regArray[a] = matrixKwdReg;
-    a++;
+    //regArray[a] = matrixKwdReg;
+    //a++;
 
     regex_t* letKwdReg;
     letKwdReg = makeRegex("^let");
-    regArray[a] = letKwdReg;
-    a++;
+    //regArray[a] = letKwdReg;
+    //a++;
 
     regex_t* inKwdReg;
     inKwdReg = makeRegex("^in");
-    regArray[a] = inKwdReg;
-    a++;
+    //regArray[a] = inKwdReg;
+    //a++;
 
     regex_t* endKwdReg;
     endKwdReg = makeRegex("^end");
-    regArray[a] = endKwdReg;
-    a++;
+    //regArray[a] = endKwdReg;
+    //a++;
 
     regex_t* thenKwdReg;
     thenKwdReg = makeRegex("^then");
-    regArray[a] = thenKwdReg;
-    a++;
+    //regArray[a] = thenKwdReg;
+    //a++;
 
     regex_t* ifKwdReg;
     ifKwdReg = makeRegex("^if");
-    regArray[a] = ifKwdReg;
-    a++;
+    //regArray[a] = ifKwdReg;
+    //a++;
 
     regex_t* elseKwdReg;
     elseKwdReg = makeRegex("^else");
-    regArray[a] = elseKwdReg;
-    a++;
+    //regArray[a] = elseKwdReg;
+    //a++;
 
     regex_t* forKwdReg;
     forKwdReg = makeRegex("^for");
-    regArray[a] = forKwdReg;	
-    a++;
+    //regArray[a] = forKwdReg;	
+    //a++;
 
     regex_t* whileKwdReg;
     whileKwdReg = makeRegex("^while");
-    regArray[a] = whileKwdReg;	
-    a++;
+    //regArray[a] = whileKwdReg;	
+    //a++;
 
     regex_t* printKwdReg;
     printKwdReg = makeRegex("^print");
-    regArray[a] = printKwdReg;	
-    a++;
+    //regArray[a] = printKwdReg;	
+    //a++;
 
     regex_t* assignReg;
     assignReg = makeRegex("^=");
-    regArray[a] = assignReg;	
-    a++;
+    //regArray[a] = assignReg;	
+    //a++;
 
     regex_t* plusSignReg;
     plusSignReg = makeRegex("^\\+");
-    regArray[a] = plusSignReg;	
-    a++;
+    //regArray[a] = plusSignReg;	
+    //a++;
 
     regex_t* starReg;
     starReg = makeRegex("^\\*");
-    regArray[a] = starReg;	
-    a++;
+    //regArray[a] = starReg;	
+    //a++;
 
     regex_t* dashReg;
     dashReg = makeRegex("^-");
-    regArray[a] = dashReg;	
-    a++;
+    //regArray[a] = dashReg;	
+    //a++;
 
     regex_t* forwardSlashReg;
     forwardSlashReg = makeRegex("^/");
-    regArray[a] = forwardSlashReg;	
-    a++;
+    //regArray[a] = forwardSlashReg;	
+    //a++;
 
     regex_t* lessThanReg;
     lessThanReg = makeRegex("^<");
-    regArray[a] = lessThanReg;	
-    a++;
+    //regArray[a] = lessThanReg;	
+    //a++;
 
     regex_t* lessThanEqualReg;
     lessThanEqualReg = makeRegex("^<=");
-    regArray[a] = lessThanEqualReg;	
-    a++;
+    //regArray[a] = lessThanEqualReg;	
+    //a++;
 
     regex_t* greaterThanReg;
     greaterThanReg = makeRegex("^>");
-    regArray[a] = greaterThanReg;	
-    a++;
+    //regArray[a] = greaterThanReg;	
+    //a++;
 
     regex_t* greaterThanEqualReg;
     //previous regex was ^//>= which is wrong based on the forest bad syn good tokens test (same for <=)
     greaterThanEqualReg = makeRegex("^>=");
-    regArray[a] = greaterThanEqualReg;	
-    a++;
+    //regArray[a] = greaterThanEqualReg;	
+    //a++;
 
     regex_t* equalsEqualsReg;
     equalsEqualsReg = makeRegex("^==");
-    regArray[a] = equalsEqualsReg;	
-    a++;
+    //regArray[a] = equalsEqualsReg;	
+    //a++;
 
     regex_t* notEqualsReg;
     notEqualsReg = makeRegex("^!=");
-    regArray[a] = notEqualsReg;	
-    a++;
+    //regArray[a] = notEqualsReg;	
+    //a++;
 
     regex_t* andOpReg;
     andOpReg = makeRegex("^&&");
-    regArray[a] = andOpReg;	
-    a++;
+    //regArray[a] = andOpReg;	
+    //a++;
 
     regex_t* orOpReg;
     orOpReg = makeRegex("^\\|\\|");
-    regArray[a] = orOpReg;
-    a++;
+    //regArray[a] = orOpReg;
+    //a++;
 
     regex_t* notOpReg;
     notOpReg = makeRegex("^!");
-    regArray[a] = notOpReg;
-    a++;
+    //regArray[a] = notOpReg;
+    //a++;
 	
 	Token* head = NULL;
 	Token* tail = head;
@@ -314,7 +316,7 @@ Token* Scanner::scan(const char* text){
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = intKwd;
-			//std::cout<<"Found match. term is intkwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
+		  //			std::cout<<"Found match. term is intkwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (stringConstReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
@@ -507,7 +509,7 @@ Token* Scanner::scan(const char* text){
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = greaterThan;
-			//std::cout<<"Found match. term is greaterthan"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
+			//	std::cout<<"Found match. term is greaterthan"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (greaterThanEqualReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
@@ -519,7 +521,7 @@ Token* Scanner::scan(const char* text){
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
 			term = equalsEquals;
-			//std::cout<<"Found match. term is EQEQ"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
+			//	std::cout<<"Found match. term is EQEQ"<<term<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
 		}
 		numMatchedChars = matchRegex (notEqualsReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
@@ -555,6 +557,7 @@ Token* Scanner::scan(const char* text){
 
 		//printf("done matching\n");
 		if(term == lexicalError){
+		  //std::cout << "LEXICAL ERROR " << std::endl; printf("Text Matched: %.*s\n",1,text);
 			maxNumMatchedChars = 1;
 		}
 		std::string lex (text, maxNumMatchedChars);

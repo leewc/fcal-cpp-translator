@@ -72,9 +72,12 @@ class ScannerTestSuite : public CxxTest::TestSuite
   // Test that a list of tokens has no lexicalError tokens.
   bool noLexicalErrors (Token *tks) {
     Token *currentToken = tks ;
+    int i = 0;
     while (currentToken != NULL) {
+      i++;
       if (currentToken->terminal == lexicalError) {
 	printf("problem: %s\n",currentToken->lexeme.c_str());
+	cout << "at " << i;
 	return false ;
       }
       else {
@@ -182,7 +185,6 @@ class ScannerTestSuite : public CxxTest::TestSuite
   */
     
   void test_scan_bad_syntax_good_tokens ( ) {
-    cout << "Starting test for bad syn good tokens!" << endl;
     const char *filename = "../samples/bad_syntax_good_tokens.dsl" ;
     char *text =  readInputFromFile ( filename )  ;
     TS_ASSERT ( text ) ;
@@ -221,7 +223,7 @@ class ScannerTestSuite : public CxxTest::TestSuite
   }
 
   
-  void xtest_scan_sample_forestLoss ( ) {
+  void test_scan_sample_forestLoss_v2 ( ) {
     scanFileNoLexicalErrors ("../samples/forest_loss_v2.dsl") ;
   }
   
@@ -474,7 +476,7 @@ void test_terminal_forwadrSlash () {
   }
   
 void test_terminal_lessThan () {
-    Token *tks = s-> scan("  \<");
+    Token *tks = s-> scan("  <");
     TS_ASSERT (tks != NULL) ;
     tokenType ts[] = { lessThan,endOfFile } ;
     TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
