@@ -11,7 +11,8 @@ construct was matched.
 
 enum tokenEnumType {
 
-	intKwd, floatKwd, stringKwd, matrixKwd,
+        intKwd, floatKwd, boolKwd, 
+        trueKwd, falseKwd, stringKwd, matrixKwd,
 	letKwd, inKwd, endKwd, ifKwd, thenKwd, elseKwd,
 	forKwd, whileKwd, printKwd,
 
@@ -48,9 +49,10 @@ class Token { //Can add more fields later
 	tokenType terminal;
 	std::string lexeme;
 	Token* next;
-  Token(tokenType, const char*, int, Token*);
+  	Token(tokenType, const char*, int, Token*);
 	Token(tokenType, std::string, Token*);
- Token();
+	Token();
+ 	Token (const char*,tokenType, Token*) ;
 };
 
 /*/Token constructor

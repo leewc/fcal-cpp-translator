@@ -251,6 +251,28 @@ void test_terminal_stringKwd () {
 
   }
   
+void test_terminal_boolKwd () {
+    Token *tks = s-> scan("  Bool");
+    TS_ASSERT (tks != NULL) ;
+    tokenType ts[] = { boolKwd,endOfFile } ;
+    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+
+  }
+
+void test_terminal_trueKwd () {
+    Token *tks = s-> scan("  True");
+    TS_ASSERT (tks != NULL) ;
+    tokenType ts[] = { trueKwd,endOfFile } ;
+    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+
+  }
+void test_terminal_falseKwd () {
+    Token *tks = s-> scan("  False");
+    TS_ASSERT (tks != NULL) ;
+    tokenType ts[] = { falseKwd,endOfFile } ;
+    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+
+  }
 void test_terminal_matrixKwd () {
     Token *tks = s-> scan("  Matrix");
     TS_ASSERT (tks != NULL) ;

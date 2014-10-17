@@ -15,14 +15,22 @@ copy of the original text (terminal), what type of token it is
 //Token constructors
 Token::Token(tokenType inTerm, const char* text, int matchedChars, Token* inNext){
 	terminal = inTerm;
- std::string newLex;
- newLex.assign(text,matchedChars);
+ 	std::string newLex;
+ 	newLex.assign(text,matchedChars);
 	lexeme = newLex;
 	next = inNext;
 }
 Token::Token(tokenType inTerm, std::string inLex, Token* inNext){
 	terminal = inTerm;
 	lexeme = inLex;
+	next = inNext;
+}
+
+Token::Token(const char* text, tokenType inTerm, Token* inNext){
+	terminal = inTerm;
+	std::string newLex;
+	newLex.assign(text);
+	lexeme = newLex;
 	next = inNext;
 }
 
@@ -161,6 +169,15 @@ Token* Scanner::scan(const char* text){
     intKwdReg = makeRegex("^Int");
     //regArray[a] = intKwdReg;	
     //a++;
+
+    regex_t* boolKwdReg;
+    boolKwdReg = makeRegex ("^Bool");
+
+    regex_t* trueKwdReg;
+    trueKwdReg = makeRegex ("^True");
+
+    regex_t* falseKwdReg;
+    falseKwdReg = makeRegex ("^False");
 
     regex_t* floatKwdReg;
     floatKwdReg = makeRegex("^Float");
@@ -341,7 +358,25 @@ Token* Scanner::scan(const char* text){
 			maxNumMatchedChars = numMatchedChars ;
 			term = stringKwd;
 			//std::cout<<"Found match. term is stringkwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
-		}
+		}	
+		numMatchedChars = matchRegex (boolKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = boolKwd;
+			//std::cout<<"Found match. term is boolkwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
+		}	
+		numMatchedChars = matchRegex (trueKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = trueKwd;
+			//std::cout<<"Found match. term is truekwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
+		}	
+		numMatchedChars = matchRegex (falseKwdReg, text);
+		if (numMatchedChars > maxNumMatchedChars) {
+			maxNumMatchedChars = numMatchedChars ;
+			term = falseKwd;
+			//std::cout<<"Found match. term is falsekwd"<<std::endl; printf("Text matched: %.*s\n",numMatchedChars,text);
+		}	
 		numMatchedChars = matchRegex (matrixKwdReg, text);
 		if (numMatchedChars > maxNumMatchedChars) {
 			maxNumMatchedChars = numMatchedChars ;
