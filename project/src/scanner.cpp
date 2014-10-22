@@ -114,7 +114,7 @@ Token* Scanner::scan(const char* text){
     //Constants: End
         
     regex_t* variableNameReg ;
-    variableNameReg = makeRegex("^([a-zA-Z])+[0-9a-zA-z]*");
+    variableNameReg = makeRegex("^([a-zA-Z_])+[0-9a-zA-Z]*"); 
     //regArray[a] = variableNameReg;
     //a++;
 
