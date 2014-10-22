@@ -1,0 +1,34 @@
+Division of Labor Statement for Iteration 2
+
+Work Done Jointly
+1. Planning the timeline of iteration 2
+- We decided to work on iteration 2 during the lab section as well as have it done as soon as possible.
+- The updates to the makefile were also done jointly, which was great as both team members spotted errors
+  together.
+
+2. Implementing the parser and it's components into the scanner we made.
+- This was done in the lab section on Oct 17 together. As we had followed the guidelines for 
+  every aspect in iteration 1 and applied what we've learnt in lectures, this was done fairly quickly.
+- The only challenge was to ensure that the proper dependencies and files were passed in the makefile 
+  for the successful compilation of the new parser and the scanner. We also had an issue with constructors
+  used by parser but these did not cause any delays.
+- No changes were made into the given parser. 
+- The unplanned requirements change did not halt the development of the program entirely as proper
+  planning and code design on our part allowed our scanner to adapt to the requirements change painlessly. 
+- Upon successful implementation, only 2 test cases failed, which we decided to work on separately.
+
+Work Done Separately
+1. Sophia pulled and copied iteration2 files into the groups source folder (taken from the public
+   repository) to prepare for the implementation of the parser.
+2. Lee attempted to modularize code from scanner.cpp but was unsuccessful. 
+3. Upon discussion via text, it was decided that focus on implementing the parser should be priority.
+4. Sophia and Lee both debugged the scanner as the test cases failed at sample3. 
+5. Lee proceeded to debug the project by modifying the parser to give logs (parser_debug.cpp) 
+   of the tokenlists and the parse, in which he discovered that the issue was with regex matching 
+   of varName, which was fixed after consulting with Sophia.
+6. Sophia then checked that the overall requirements have been met and done properly.
+7. Lee then wrote the division of labor statement and Sophia finalized the project files before
+   tagging. 
+
+All in all requirements for iteration 2 was met fairly painlessly thanks to the cooperation and 
+communication from both project partners as well as a solid code design made in iteration1. 
