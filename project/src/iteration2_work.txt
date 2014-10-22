@@ -17,6 +17,8 @@ Work Done Jointly
   planning and code design on our part allowed our scanner to adapt to the requirements change painlessly. 
 - Upon successful implementation, only 2 test cases failed, which we decided to work on separately.
 
+3. We then jointly written a sample FCAL program which was used to test the scanner and parser with.
+
 Work Done Separately
 1. Sophia pulled and copied iteration2 files into the groups source folder (taken from the public
    repository) to prepare for the implementation of the parser.
