@@ -227,355 +227,99 @@ class ScannerTestSuite : public CxxTest::TestSuite
     scanFileNoLexicalErrors ("../samples/forest_loss_v2.dsl") ;
   }
   
-  void test_terminal_intKwd () {
-    Token *tks = s-> scan("  Int");
+  void compare_terminals(const char* inString, tokenType tT){
+    Token *tks = s->scan(inString);
     TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { intKwd,endOfFile } ;
+    tokenType ts[] = { tT, endOfFile } ;
     TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
-
   }
+  
+  void test_terminal_intKwd () { compare_terminals(" Int", intKwd);}
    
-void test_terminal_floatKwd () {
-    Token *tks = s-> scan("  Float");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { floatKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_floatKwd () { compare_terminals(" Float", floatKwd);}
 
-  }
+  void test_terminal_stringKwd () { compare_terminals(" Str", stringKwd);}
 
-void test_terminal_stringKwd () {
-    Token *tks = s-> scan("  Str");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { stringKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_boolKwd () { compare_terminals("  Bool", boolKwd);}
 
-  }
+  void test_terminal_trueKwd () { compare_terminals("  True", trueKwd);}
+
+  void test_terminal_falseKwd () { compare_terminals("  False", falseKwd);}
+
+  void test_terminal_matrixKwd () { compare_terminals("  Matrix", matrixKwd);}
+
+  void test_terminal_letKwd () { compare_terminals("  let", letKwd);}
+
+  void test_terminal_inKwd () { compare_terminals("  in", inKwd);}
+
+  void test_terminal_endKwd () { compare_terminals("  end", endKwd);}
   
-void test_terminal_boolKwd () {
-    Token *tks = s-> scan("  Bool");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { boolKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_ifKwd () { compare_terminals("  if", ifKwd);}
 
-  }
+  void test_terminal_thenKwd () { compare_terminals("  then", thenKwd);}
 
-void test_terminal_trueKwd () {
-    Token *tks = s-> scan("  True");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { trueKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_elseKwd () { compare_terminals("  else", elseKwd);}
 
-  }
-void test_terminal_falseKwd () {
-    Token *tks = s-> scan("  False");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { falseKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_forKwd () { compare_terminals("  for", forKwd);}
 
-  }
-void test_terminal_matrixKwd () {
-    Token *tks = s-> scan("  Matrix");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { matrixKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_whileKwd () { compare_terminals("  while", whileKwd);}
 
-  }
-  
-void test_terminal_letKwd () {
-    Token *tks = s-> scan("  let");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { letKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_printKwd () { compare_terminals("  print", printKwd);}
 
-  }
-  
-void test_terminal_inKwd () {
-    Token *tks = s-> scan("  in");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { inKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_intConst () { compare_terminals("  123", intConst);}
 
-  }
-  
-void test_terminal_endKwd () {
-    Token *tks = s-> scan("  end");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { endKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_floatConst () { compare_terminals("  123.456", floatConst);}
 
-  }
-  
-void test_terminal_ifKwd () {
-    Token *tks = s-> scan("  if");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { ifKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_stringConst () { compare_terminals("  \"string\"", stringConst);}
 
-  }
-  
-void test_terminal_thenKwd () {
-    Token *tks = s-> scan("  then");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { thenKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_variableName () { compare_terminals("  variable_Name10", variableName);}
 
-  }
-  
-void test_terminal_elseKwd () {
-    Token *tks = s-> scan("  else");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { elseKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_leftParen () { compare_terminals("  (", leftParen);}
 
-  }
-  
-void test_terminal_forKwd () {
-    Token *tks = s-> scan("  for");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { forKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_rightParen () { compare_terminals("  )", rightParen);}
 
-  }
-  
-void test_terminal_whileKwd () {
-    Token *tks = s-> scan("  while");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { whileKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_leftCurly () { compare_terminals("  {", leftCurly);}
 
-  }
-  
-void test_terminal_printKwd () {
-    Token *tks = s-> scan("  print");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { printKwd,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_rightCurly () { compare_terminals("  }", rightCurly);}
 
-  }
-  
-void test_terminal_intConst () {
-    Token *tks = s-> scan("  123");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { intConst,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_leftSquare () { compare_terminals("  [", leftSquare);}
 
-  }
-  
-void test_terminal_floatConst () {
-    Token *tks = s-> scan("  123.456");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { floatConst,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_rightSquare () { compare_terminals("  ]", rightSquare);}
 
-  }
-  
-void test_terminal_stringConst () {
-    Token *tks = s-> scan("  \"string\"");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { stringConst,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_comma () { compare_terminals("  ,", comma);}
 
-  }
-  
-void test_terminal_variableName () {
-    Token *tks = s-> scan("  variableName");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { variableName,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_semiColon () { compare_terminals("  ;", semiColon);}
 
-  }
-  
-void test_terminal_leftParen () {
-    Token *tks = s-> scan("  (");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { leftParen,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_colon () { compare_terminals("  :", colon);}
 
-  }
-  
-void test_terminal_rightParen () {
-    Token *tks = s-> scan("  )");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { rightParen,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_assign () { compare_terminals("  =", assign);}
 
-  }
-  
-void test_terminal_leftCurly () {
-    Token *tks = s-> scan("  {");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { leftCurly,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_plusSign () { compare_terminals("  +", plusSign);}
 
-  }
-  
-void test_terminal_rightCurly () {
-    Token *tks = s-> scan("  }");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { rightCurly,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_star () { compare_terminals("  *", star);}
 
-  }
-  
-void test_terminal_leftSquare () {
-    Token *tks = s-> scan("  [");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { leftSquare,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_dash () { compare_terminals("  -", dash);}
 
-  }
-  
-void test_terminal_rightSquare () {
-    Token *tks = s-> scan("  ]");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { rightSquare,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_forwadrSlash () { compare_terminals("  /", forwardSlash);}
 
-  }
-  
-void test_terminal_comma () {
-    Token *tks = s-> scan("  ,");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { comma,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_lessThan () { compare_terminals("  <", lessThan);}
 
-  }
-  
-void test_terminal_semiColon () {
-    Token *tks = s-> scan("  ;");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { semiColon,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_lessThanEqual () { compare_terminals("  <=", lessThanEqual);}
 
-  }
-  
-void test_terminal_colon () {
-    Token *tks = s-> scan("  :");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { colon,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_greaterThan () { compare_terminals("  >", greaterThan);}
 
-  }
-  
-void test_terminal_assign () {
-    Token *tks = s-> scan("  =");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { assign,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_greaterThanEqual () { compare_terminals("  >=", greaterThanEqual);}
 
-  }
-  
-void test_terminal_plusSign () {
-    Token *tks = s-> scan("  +");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { plusSign,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_equalsEquals () { compare_terminals("  ==", equalsEquals);}
 
-  }
-  
-void test_terminal_star () {
-    Token *tks = s-> scan("  *");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { star,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_notEquals () { compare_terminals("  !=", notEquals);}
 
-  }
-  
-void test_terminal_dash () {
-    Token *tks = s-> scan("  -");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { dash,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_andOp () { compare_terminals("  &&", andOp);}
 
-  }
-  
-void test_terminal_forwadrSlash () {
-    Token *tks = s-> scan("  /");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { forwardSlash,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_orOp () { compare_terminals("  ||", orOp);}
 
-  }
-  
-void test_terminal_lessThan () {
-    Token *tks = s-> scan("  <");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { lessThan,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
+  void test_terminal_notOp () { compare_terminals("  !", notOp);}
 
-  }
-  
-void test_terminal_lessThanEqual () {
-    Token *tks = s-> scan("  <=");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { lessThanEqual,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
-
-  }
-  
-void test_terminal_greaterThan () {
-    Token *tks = s-> scan("  >");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { greaterThan,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
-
-  }
-  
-void test_terminal_greaterThanEqual () {
-    Token *tks = s-> scan("  >=");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { greaterThanEqual,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
-
-  }
-  
-void test_terminal_equalsEquals () {
-    Token *tks = s-> scan("  ==");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { equalsEquals,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
-
-  }
-  
-void test_terminal_notEquals () {
-    Token *tks = s-> scan("  !=");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { notEquals,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
-
-  }
-  
-void test_terminal_andOp () {
-    Token *tks = s-> scan("  &&");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { andOp,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
-
-  }
-  
-void test_terminal_orOp () {
-    Token *tks = s-> scan("  ||");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { orOp,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
-
-  }
-  
-void test_terminal_notOp () {
-    Token *tks = s-> scan("  !");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { notOp,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
-
-  }
-  
-void test_terminal_endOfFile () {
-    Token *tks = s-> scan("  ");
-    TS_ASSERT (tks != NULL) ;
-    tokenType ts[] = { endOfFile,endOfFile } ;
-    TS_ASSERT ( sameTerminals ( tks, 2, ts ) ) ;
-
-  }
-  
+  void test_terminal_endOfFile () { compare_terminals("  ", endOfFile);}
 
 } ;
