@@ -64,9 +64,12 @@ Token::Token(tokenType inTerm, std::string inLex, Token* inNext){
 
 //Scanner class
 class Scanner {
-	public:
-	int consumeWhiteSpaceAndComments(regex_t*, regex_t*, regex_t*, const char*);
-	Token* scan(const char*);
+    public:
+     regex_t* regArray;
+     regex_t* filterArray;
+     Scanner();
+     int consumeWhiteSpaceAndComments(regex_t*, regex_t*, regex_t*, const char*);
+     Token* scan(const char*); 
 };
 
 int consumeWhiteSpaceAndComments(regex_t *whiteSpace,regex_t *blockComment, regex_t *lineComment,const char *text);
