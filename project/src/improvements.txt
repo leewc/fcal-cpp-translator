@@ -1,0 +1,13 @@
+1. Duplication test code. Handled by Sophia.
+When testing that our scanner made and matched token types properly, we previously had many multi-line test cases that would make tokens and assertions for every type. We condensed all the repetetive code into a helper function to then be called by each test, making the tests one line each.
+2. Only one call to makeRegex per token type. Handled by Lee.
+We had all the makeRegex calls within the scan functio of the scanner class. We moved all of these into a constructor for Scanner.
+3. No redundant arrays of tokenType.
+We never had these in the first place.
+4. Minor re-ordering of TokenEnumType values OK. Handled by Lee
+This wasn't an issue in our original iteration, but when we made these modifications we made sure that nothing was more dependent on the enum order than was necessary.
+5. No named regex_t fields. Handled by Lee.
+When we moved all the makeRegex calls to the Scanner constructor, we filled out a regex_t array with each regex.
+6. No use of integer literals in place of tokenType values. 
+We never hard-coded any integers when referring to tokenTypes.
+Testing: We used black box testing to check that all our improvements worked by running "make run-tests"
