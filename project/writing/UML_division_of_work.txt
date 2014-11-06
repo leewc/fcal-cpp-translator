@@ -1,1 +1,3 @@
-*TODO*
+We made the top level classes that extend Node while together in lab.
+Sophia made most of the classes extending Expression.
+Lee made the rest of them.
