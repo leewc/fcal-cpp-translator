@@ -79,6 +79,15 @@ ParseResult Parser::parse (const char *text) {
     return pr ;
 }
 
+void Parser:initialzeParser (const char* text) {
+
+	// used during dev only to be removed in final product... :D 
+	s = new Scanner();
+	stokens = s->scan (text) ;        
+        tokens = extendTokenList ( this, stokens ) ;
+
+        assert (tokens != NULL) ;
+}
 /* 
  * parse methods for non-terminal symbols
  * --------------------------------------
@@ -98,6 +107,16 @@ ParseResult Parser::parseProgram () {
     ParseResult prStmts = parseStmts() ;
     match(rightCurly);
     match(endOfFile) ;
+
+
+//create a program
+	Varname *v = new VarName(name);
+	Stmts *s = NULL;
+	if (prStmts.ast)
+	{
+		s = dynamic_cast<Stmts *>(psStmts.ast); //empty statements is a subclass of stmts
+		if(!s) throw ((string) "Bas cast of Stmts in parseProgram");
+	}
     
     return pr ;
 }
@@ -185,6 +204,7 @@ ParseResult Parser::parseStmts () {
     else {
         // Stmts ::= 
         // nothing to match.
+	pr.ast = new EmptyStmts(); 
     }
     return pr ;
 }
@@ -393,10 +413,24 @@ ParseResult Parser::parseNotExpr () {
 // Expr ::= Expr plusSign Expr
 ParseResult Parser::parseAddition ( ParseResult prLeft ) {
     // parser has already matched left expression 
+
+	//we added this
+	Expr *left = dynameic_cast<Expr *> (prLeft.ast);
+	if (!left) throw( (string) "bad casr in left expr in parseAddition");
+
+
     ParseResult pr ;
     match ( plusSign ) ;
-    parseExpr( prevToken->lbp() ); 
-    return pr ;
+    //parseExpr( prevToken->lbp() ); 
+    
+	PasrseResultprRight = parseExpr( prevToken->lbp() ); 
+    	*right = ddddd
+	if(!right) throw. ...
+
+	pr.ast = new BinOpExpr(left, op, right);
+	
+
+return pr ;
 }
 
 // Expr ::= Expr star Expr

@@ -1,0 +1,54 @@
+void text_expr (void_ {
+	Parser *p - new Parser();
+	p->initializeParser("1");
+	ParseResult pr = p->parseIntConst();
+	
+	TSM_ASSERT("Failed to parse", pr.ok);
+	TSM_ASSERT("No ast generated", pr.ast);
+	TSM_ASSERT_EQUALS("Unparse didn't match", pr.ast->unparse(), 1);
+}
+
+
+void text_expr (void_ {
+	Parser *p - new Parser();
+	p->initializeParser("1+2");
+	ParseResult pr = p->parseExpr(0); // 0 is just an artifact 
+	
+	TSM_ASSERT("Failed to parse", pr.ok);
+	TSM_ASSERT("No ast generated", pr.ast);
+	TSM_ASSERT_EQUALS("Unparse didn't match", pr.ast->unparse(), 1);
+}
+
+
+
+
+//in parser
+pr.ast = new appropriateClass(whatever works here);
+
+
+//AST.cpp
+# include "AST.h"
+
+std::string AnyConst::unparse() { 
+	return constString;
+
+
+std::string BinOpExpr:;unparse() {
+	return left-> unparse() + op + right-> unparse()
+	//the -> means deference a pointer. 
+
+
+std::String Program::unparse() {
+	return varName -> unparse()+ "() { \n" + stmts-> unparse()) + "}" //add own white spaces..
+}
+
+std::string EmptyStmts::unparse() {
+	return "";
+}
+
+std::string Varname() {
+	return varName;
+}
+
+
+//for expressions it's not a recursive decent parser, see the paper given mot super important to understand it

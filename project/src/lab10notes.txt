@@ -1,0 +1,76 @@
+#ifindef somethingIcan'tRead Node_H
+#define Node_H
+
+#include <string>
+#include <iostream>
+
+#include "scanner.h"
+
+class Node ;
+class Stmts;
+class EmptyStmts;
+class Expr ;
+class VarName
+class AnyConst ;
+class BinOpExpr; //for us it's Infix expr
+
+
+//Node
+class Node {
+	public:
+		virtual ste::string unparse() { return" this should be pure virtual"
+		virtual ste::string cppCode(){return " This should be pure virtual"
+		// change above to = 0 later to make it pure virtual 
+
+		virtual ~Node() { }
+};
+
+
+class Program: public Node { //aka class Root :Node means inherits from Node, have ot make public else it's private inheritance
+	public:
+		Program(varName *v, Stmts *s) : varName(v), stmts (s) {};
+	private:
+		VarName *varName;
+		Stmts *stmts;	
+}
+
+
+class Expr: public Node {};
+
+
+
+//forward declaration error means we forgot to write a statements class but we are inheriting it
+class Stmt: something something.
+
+class VarName: public Expr {
+	public:
+		VarName(std::string s): varName(s) {};
+		std::string unparse();
+	private:
+		std::string varName;
+};
+
+
+class EmptyStmts: public Stmts {}; 
+
+
+class AnyConst: public Expr {
+	public:
+		AnyConst(std::string s) : constString(s) {};		
+	private:
+		std::string constString;
+};
+
+
+class BinOpExpr: public Expr {
+
+	public:;
+		BinOpExpr(Expr *l, std::string o, Expr *r) {left(l), right = r, op = o};
+		std:;string:: unparse()
+	private:
+		Expr *left;
+		std::string op; //do some intelligent checking...
+		Expr *right;
+	
+}
+#endif
