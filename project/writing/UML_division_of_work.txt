@@ -1,0 +1,3 @@
+We decided on the top level nodes together in lab.
+Lee made the initial and basic format using draw.io
+Sophia went through and made additions like adding constructor methods, and made the format consistent.
