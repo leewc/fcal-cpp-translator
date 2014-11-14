@@ -23,6 +23,8 @@
 
 */
 
+//TODO remember to add pr.ast = new (thing) for each parse function
+
 #include "parser.h"
 #include "scanner.h"
 #include "extToken.h"
@@ -30,6 +32,7 @@
 #include <assert.h>
 using namespace std ;
 
+/*! Destructor for parser.*/
 Parser::~Parser() {
     if (s) delete s ;
 
@@ -52,7 +55,7 @@ Parser::~Parser() {
 }
 
 
-
+/*! Here's the constructor for parser*/
 Parser::Parser ( ) { 
     currToken = NULL; prevToken = NULL ; tokens = NULL; 
     s = NULL; stokens = NULL; 
@@ -115,7 +118,7 @@ ParseResult Parser::parseProgram () {
 	if (prStmts.ast)
 	{
 		s = dynamic_cast<Stmts *>(psStmts.ast); //empty statements is a subclass of stmts
-		if(!s) throw ((string) "Bas cast of Stmts in parseProgram");
+		if(!s) throw ((string) "Bad cast of Stmts in parseProgram");
 	}
     
     return pr ;
@@ -199,7 +202,10 @@ ParseResult Parser::parseStmts () {
     if ( ! nextIs(rightCurly) && !nextIs(inKwd)  ) {
         // Stmts ::= Stmt Stmts
         ParseResult prStmt = parseStmt() ;
+	Stmt *stmt = dynamic_cast<Stmt *>(prStmt.ast) ;
         ParseResult prStmts = parseStmts() ;
+	Stmts *stmts = dynamic_cast<Stmts *>(prStmts.ast) ;
+	pr.ast = new StmtsSeq(stmt, stmts);
     }
     else {
         // Stmts ::= 
@@ -413,19 +419,20 @@ ParseResult Parser::parseNotExpr () {
 // Expr ::= Expr plusSign Expr
 ParseResult Parser::parseAddition ( ParseResult prLeft ) {
     // parser has already matched left expression 
+    ParseResult pr ;
 
 	//we added this
 	Expr *left = dynameic_cast<Expr *> (prLeft.ast);
-	if (!left) throw( (string) "bad casr in left expr in parseAddition");
+	if (!left) throw( (string) "bad cast in left expr in parseAddition");
 
 
-    ParseResult pr ;
     match ( plusSign ) ;
+	string * op = new string(prevToken->lexeme);
     //parseExpr( prevToken->lbp() ); 
     
 	PasrseResultprRight = parseExpr( prevToken->lbp() ); 
-    	*right = ddddd
-	if(!right) throw. ...
+    	Expr *right = dynamic_cast<Expr *>(prRight.ast);
+	if(!right) throw((string) "Bad cast in right expr in parseAddition");
 
 	pr.ast = new BinOpExpr(left, op, right);
 	
