@@ -4,6 +4,7 @@ CXXFLAGS = --error-printer --abort-on-fail --have-eh
 
 FLAGS = -Wall -g
 
+all: readInput.o regex.o scanner.o parser.o extToken.o ast.o parseResult.o
 # Program files.
 readInput.o:	readInput.cpp readInput.h
 	g++ $(FLAGS) -c readInput.cpp 
@@ -47,14 +48,14 @@ scanner_tests.cpp:	scanner.o scanner_tests.h readInput.h
 
 parser_tests:	parser_tests.cpp parser.o scanner.o readInput.o extToken.o regex.o parseResult.o parseResult.h extToken.h
 	g++ $(FLAGS) -I$(CXX_DIR)  -o parser_tests \
-		scanner.o parser.o readInput.o extToken.o regex.o parseResult.o parser_tests.cpp
+		scanner.o parser.o readInput.o extToken.o regex.o parseResult.o parser_tests.cpp ast.o
 
-parser_tests.cpp:	parser.o scanner.o extToken.o regex.o parser_tests.h readInput.h parseResult.h
+parser_tests.cpp:	parser.o scanner.o extToken.o regex.o parser_tests.h readInput.h parseResult.h ast.o
 	$(CXXTEST) $(CXXFLAGS) -o parser_tests.cpp parser_tests.h
 
 ast_tests: ast_tests.cpp parser.h ast_tests.h readInput.h scanner.h 
 	g++ $(FLAGS) -I$(CXX_DIR) -o  ast_tests \
-		ast_tests.cpp readInput.o parser.o
+		ast_tests.cpp readInput.o parser.o ast.o scanner.o extToken.o regex.o parseResult.o
 
 ast_tests.cpp: 	parser.h ast_tests.h readInput.h
 	$(CXXTEST) $(CXXFLAGS) -o ast_tests.cpp ast_tests.h

@@ -26,6 +26,7 @@
 
 #include "scanner.h"
 #include "parseResult.h"
+#include "ast.h"
 
 #include <string>
 
@@ -38,6 +39,8 @@ public:
     ~Parser() ;
 
     ParseResult parse (const char *text) ;
+    
+    void initialzeParser (const char* text);
     // Parser methods for the nonterminals:
 
     ParseResult parseProgram () ;

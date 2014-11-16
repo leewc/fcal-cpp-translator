@@ -28,6 +28,7 @@
 #include "parser.h"
 #include "scanner.h"
 #include "extToken.h"
+#include "ast.h"
 #include <stdio.h>
 #include <assert.h>
 using namespace std ;
@@ -82,7 +83,7 @@ ParseResult Parser::parse (const char *text) {
     return pr ;
 }
 
-void Parser:initialzeParser (const char* text) {
+void Parser::initialzeParser (const char* text) {
 
 	// used during dev only to be removed in final product... :D 
 	s = new Scanner();
@@ -113,13 +114,14 @@ ParseResult Parser::parseProgram () {
 
 
 //create a program
-	Varname *v = new VarName(name);
+	VarName *v = new VarName(name);
 	Stmts *s = NULL;
 	if (prStmts.ast)
 	{
-		s = dynamic_cast<Stmts *>(psStmts.ast); //empty statements is a subclass of stmts
+		s = dynamic_cast<Stmts *>(prStmts.ast); //empty statements is a subclass of stmts
 		if(!s) throw ((string) "Bad cast of Stmts in parseProgram");
 	}
+ pr.ast = new Root(v,s);
     
     return pr ;
 }
@@ -422,7 +424,7 @@ ParseResult Parser::parseAddition ( ParseResult prLeft ) {
     ParseResult pr ;
 
 	//we added this
-	Expr *left = dynameic_cast<Expr *> (prLeft.ast);
+	Expr *left = dynamic_cast<Expr *> (prLeft.ast);
 	if (!left) throw( (string) "bad cast in left expr in parseAddition");
 
 
@@ -430,7 +432,7 @@ ParseResult Parser::parseAddition ( ParseResult prLeft ) {
 	string * op = new string(prevToken->lexeme);
     //parseExpr( prevToken->lbp() ); 
     
-	PasrseResultprRight = parseExpr( prevToken->lbp() ); 
+	ParseResult prRight = parseExpr( prevToken->lbp() ); 
     	Expr *right = dynamic_cast<Expr *>(prRight.ast);
 	if(!right) throw((string) "Bad cast in right expr in parseAddition");
 

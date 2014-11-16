@@ -28,6 +28,9 @@ class Node {
 class Expr : public Node {
 } ;
 
+class Decl : public Node {
+};
+
 
 class Root : public Node {
 public:
@@ -48,7 +51,7 @@ class Stmts : public Node {
 
 class EmptyStmts : public Stmts {
 public:
-    EmptyStmts ( ) { } ;
+    EmptyStmts( ){} ;
     std::string unparse ();
 private:
     EmptyStmts(const EmptyStmts &) {} ;
@@ -56,7 +59,7 @@ private:
 
 class StmtsSeq : public Stmts {
 public:
-    StmtsSeq ( Stmt *_stmt, Stmts *_stmts) : stmt(_stmt), stmts(_stmts) { } ;
+    StmtsSeq( Stmt *_stmt, Stmts *_stmts) : stmt(_stmt), stmts(_stmts) { } ;
     std::string unparse ( );
 private:
     Stmt *stmt ;
@@ -68,9 +71,47 @@ private:
 class Stmt : public Node {
 } ;
 
+//Decls
+
+class SimpleDecl : public Decl {
+public:
+       SimpleDecl(std::string _kwd, VarName *_var) : kwd(_kwd), var(_var) {};
+       std::string unparse();
+private:
+        std::string kwd;
+        VarName *var;
+        SimpleDecl (const SimpleDecl &) {} ;
+} ;
+
+class MatrixDecl : public Decl {
+public:
+       MatrixDecl(VarName *_var1, Expr *_expr1) : var1(_var1), expr1(_expr1) {};
+       std::string unparse();
+private:
+        VarName *var1;
+        Expr *expr1;
+        MatrixDecl (const MatrixDecl &) {} ;
+} ;
+
+class LongMatrixDecl : public Decl {
+public:
+       LongMatrixDecl(VarName *_var1, VarName *_var2, VarName *_var3, Expr *_expr1, Expr *_expr2, Expr *_expr3) : var1(_var1), var2(_var2), var3(_var3), expr1(_expr1), expr2(_expr2), expr3(_expr3) {};
+       std::string unparse();
+private:
+        VarName *var1;
+        VarName *var2;
+        VarName *var3;
+        Expr *expr1;
+        Expr *expr2;
+        Expr *expr3;
+        LongMatrixDecl (const LongMatrixDecl &) {} ;
+} ;
+
+//Expresssions
+
 class BinOpExpr : public Expr {
 public:
-    BinOpExpr ( Expr *_left, std::string *_op, Expr *_right)
+    BinOpExpr( Expr *_left, std::string *_op, Expr *_right)
     : left(_left), op(_op), right(_right) { } ;
     std::string unparse ( ) ;
 private:
@@ -85,7 +126,7 @@ private:
 // VarName
 class VarName : public Expr {
 public:
-    VarName (std::string _lexeme ) : lexeme(_lexeme) { } ;
+    VarName(std::string _lexeme ) : lexeme(_lexeme) { } ;
     std::string unparse ( ) ;
 private:
     std::string lexeme ;
@@ -103,6 +144,56 @@ private:
     AnyConst(const AnyConst &) {};
 } ;
 
+class NestOrFuncExpr : public Expr {
+public:
+       NestOrFuncExpr(VarName *_var, Expr *_expr) : var(_var), expr(_expr) {};
+       std::string unparse();
+private:
+        VarName *var;
+        Expr *expr;
+        NestOrFuncExpr(const NestOrFuncExpr &) {};
+};
+
+class MatrixRefExpr : public Expr {
+public:
+       MatrixRefExpr(VarName *_var, Expr *_expr1, Expr *_expr2) : var(_var), expr1(_expr1), expr2(_expr2){};
+       std::string unparse();
+private:
+        VarName *var;
+        Expr *expr1;
+        Expr *expr2;
+        MatrixRefExpr(const MatrixRefExpr &) {};
+};
+
+class LetExpr : public Expr {
+public:
+       LetExpr(Stmts *_stmts, Expr *_expr) : stmts(_stmts), expr(_expr) {};
+       std::string unparse();
+private:
+        Stmts *stmts;
+        Expr *expr;
+        LetExpr(const LetExpr &) {};
+};
+
+class IfElseExpr : public Expr {
+public:
+       IfElseExpr(Expr *_expr1, Expr *_expr2, Expr *_expr3) : expr1(_expr1), expr2(_expr2), expr3(_expr3) {};
+       std::string unparse();
+private:
+        Expr *expr1;
+        Expr *expr2;
+        Expr *expr3;
+        IfElseExpr(const IfElseExpr &) {};
+};
+
+class NotExpr : public Expr {
+public:
+       NotExpr(Expr *_expr) : expr(_expr) {};
+       std::string unparse();
+private:
+        Expr *expr;
+        NotExpr(const NotExpr &) {};
+};
 
 #endif
 

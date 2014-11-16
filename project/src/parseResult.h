@@ -8,7 +8,7 @@
 #ifndef PARSER_RESULT_H
 #define PARSER_RESULT_H
 
-#include "AST.h"
+#include "ast.h"
 
 #include <string>
 
