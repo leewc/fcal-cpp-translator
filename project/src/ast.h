@@ -28,8 +28,6 @@ class Node {
 class Expr : public Node {
 } ;
 
-class Decl : public Node {
-};
 
 
 class Root : public Node {
@@ -44,10 +42,72 @@ private:
     Root(const Root &) {};
 } ;
 
+// Stmt
+class Stmt: public Node {} ;
+
+class DeclStmt: public Stmt {
+ public: 
+  DeclStmt(Decl *_decl){};
+  std::string unparse ();
+ private:
+  Decl *decl; //need to double check this -lee
+  DeclStmt(const DeclStmt &) {};
+}
+class IfStmt: public Stmt {
+ public:
+  IfStmt(Expr *_ifExpr, Stmt *_thenStmt){};
+  std::string unparse();
+ private:
+  Expr *ifExpr;
+  Stmt *thenStmt;
+  IfStmt(const IfStmt &) {};
+}
+
+class IfElseStmt: public IfStmt {
+ public:
+   IfElseStmt(Expr *_ifExpr, Stmt *_thenStmt, Stmt *_elseStmt){};
+   std::string unparse();
+ private:
+   Stmt *elseStmt;
+   IfElseStmt(const IfElseStmt &){}
+}
+
+class BlockStmt: public Stmt {
+ public:
+  BlockStmt(Stmts *_statements) {};
+  std::string unparse();
+ private:
+  Stmts *statements;
+  BlockStmt(const BlockStmt &){}
+}
+
+class PrintStmt: public Stmt {
+ public:
+  PrintStmt(Expr *_printExpr){};
+  std::string unparse();
+ private:
+  Expr *printExpr;
+  PrintStmt(const PrintStmt &){}
+}
+
+class AssignStmt: public Stmt {
+ public: 
+  AssignStmt(VarName *_var, Expr *_rightExpr){} ;
+  std::string unparse();
+ private:
+  VarName *var;
+  Expr *rightExpr;
+  AssignStmt(const AssignStmt &){}
+}
+
+//need to continue at longAssignStmt
+
+
+
+
 
 // Stmts
-class Stmts : public Node {
-} ;
+class Stmts : public Node {} ;
 
 class EmptyStmts : public Stmts {
 public:
@@ -68,10 +128,9 @@ private:
     StmtsSeq (const StmtsSeq &) {} ;
 } ;
 
-class Stmt : public Node {
-} ;
-
 //Decls
+class Decl : public Node {
+};
 
 class SimpleDecl : public Decl {
 public:
