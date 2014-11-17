@@ -13,25 +13,26 @@ class Decl ;
 class Root ;
 class Stmts ;
 class Stmt ;
+class VarName;
 
 // Node
 class Node {
 	public:
 		virtual std::string unparse ( ) { return " This should be pure virtual ";} ;
 		virtual std::string cppCode ( ) { return " This should be pure virtual" ; } ;
-		virtual ~Node() { }
+		virtual ~Node() { };
 } ;
 
 class Root : public Node {
-public:
-    Root(VarName *v, Stmts *s) : varName(v), stmts(s) { } ;
-    std::string unparse ();
-    virtual ~Root() ;
-private:
-    VarName *varName ;
-    Stmts *stmts ;
-    Root() : varName(NULL), stmts(NULL) { } ;
-    Root(const Root &) {};
+ public:
+ Root(VarName *v, Stmts *s) : varName(v), stmts(s) { } ;
+  std::string unparse ();
+  virtual ~Root() ;
+ private:
+  VarName *varName ;
+  Stmts *stmts ;
+ Root() : varName(NULL), stmts(NULL) { } ;
+  Root(const Root &) {};
 } ;
 
 // Stmt
@@ -39,85 +40,92 @@ class Stmt: public Node {} ;
 
 class DeclStmt: public Stmt {
  public: 
-  DeclStmt(Decl *_decl){};
+ DeclStmt(Decl *_decl) : decl(_decl) {};
   std::string unparse ();
  private:
   Decl *decl; //need to double check this -lee
   DeclStmt(const DeclStmt &) {};
-}
-class IfStmt: public Stmt {
+} ;
+
+class IfStmt:public Stmt {
  public:
-  IfStmt(Expr *_ifExpr, Stmt *_thenStmt){};
+  IfStmt(Expr *_ifExpr, Stmt *_thenStmt) : ifExpr(_ifExpr), thenStmt(_thenStmt) {};
   std::string unparse();
  private:
   Expr *ifExpr;
   Stmt *thenStmt;
+  IfStmt () : ifExpr(NULL), thenStmt(NULL) {}; 
   IfStmt(const IfStmt &) {};
-}
+} ;
 
-class IfElseStmt: public IfStmt {
+class IfElseStmt: public Stmt {
  public:
-   IfElseStmt(Expr *_ifExpr, Stmt *_thenStmt, Stmt *_elseStmt){};
+ IfElseStmt(Expr *_ifExpr, Stmt *_thenStmt, Stmt *_elseStmt) : ifExpr(_ifExpr), thenStmt(_thenStmt), elseStmt(_elseStmt) {};
    std::string unparse();
  private:
+   Expr *ifExpr;
+   Stmt *thenStmt;
    Stmt *elseStmt;
+   IfElseStmt () : ifExpr(NULL), thenStmt(NULL), elseStmt(NULL) {} ;
    IfElseStmt(const IfElseStmt &){};
-}
+} ;
 
 class BlockStmt: public Stmt {
  public:
-  BlockStmt(Stmts *_statements) {};
+ BlockStmt(Stmts *_statements) : statements(_statements) {};
   std::string unparse();
  private:
   Stmts *statements;
   BlockStmt(const BlockStmt &){};
-}
+} ;
 
 class PrintStmt: public Stmt {
  public:
-  PrintStmt(Expr *_printExpr){};
+ PrintStmt(Expr *_printExpr) : printExpr(_printExpr) {};
   std::string unparse();
  private:
   Expr *printExpr;
   PrintStmt(const PrintStmt &){};
-}
+} ;
 
 class AssignStmt: public Stmt {
  public: 
-  AssignStmt(VarName *_var, Expr *_rightExpr){} ;
+ AssignStmt(VarName *_var, Expr *_rightExpr) : var(_var), rightExpr(_rightExpr) {} ;
   std::string unparse();
  private:
   VarName *var;
   Expr *rightExpr;
   AssignStmt(const AssignStmt &){};
-}
+} ;
 
 
 class LongAssignStmt: public Stmt {
  public: 
-  longAssignStmt(VarName *_var, Expr* _leftExpr1, Expr* _leftExpr2, Expr* _rightExpr){};
+ LongAssignStmt(VarName *_var, Expr* _leftExpr1, Expr* _leftExpr2, Expr* _rightExpr) :
+  var(_var), leftExpr1 (_leftExpr1), leftExpr2(_leftExpr2), rightExpr (_rightExpr) {};
   std::string unparse();
  private: 
   VarName *var;
   Expr *leftExpr1;
   Expr *leftExpr2;
   Expr *rightExpr;
-  LongAssignStmt(const longAssignStmt &){};
-}
+  LongAssignStmt(const LongAssignStmt &){};
+} ;
 
 class WhileStmt: public Stmt {
  public: 
-  whileStmt(Expr* _whileExpr, Stmt* _whileStmt){};
+ WhileStmt(Expr* _whileExpr, Stmt* _whileStmt) : whileExpr(_whileExpr), whileStmt(_whileStmt){};
   std::string unparse();
  private:
-  Expr *WhileExpr;
-  Stmt *WhileStmt;
-  WhileStmt(const whileStmt &){};
-}
+  Expr *whileExpr;
+  Stmt *whileStmt;
+ WhileStmt(): whileExpr(NULL), whileStmt(NULL) {}; 
+  WhileStmt(const WhileStmt &){};
+} ;
 
 class forStmt: public Stmt { 
  public:
-  forStmt(VarName _varName, Expr* _expr1, Expr* _expr2, Stmt* _stmt);
+ forStmt(VarName* _varName, Expr* _expr1, Expr* _expr2, Stmt* _stmt): var(_varName), expr1 (_expr1), expr2(_expr2),statements (_stmt) {};
   std::string unparse();
  private:
   VarName *var;
@@ -125,7 +133,7 @@ class forStmt: public Stmt {
   Expr *expr2;
   Stmt *statements;
   forStmt(const forStmt &){};
-}
+} ;
 
 // Stmts
 class Stmts : public Node {} ;
