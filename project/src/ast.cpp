@@ -67,3 +67,53 @@ string IfElseExpr::unparse() {
 string NotExpr::unparse() {
        return "!" + expr->unparse();
 }
+
+// Stmts
+// -----------------------------------------------------------
+string EmptyStmts::unparse() {
+  return "";
+}
+
+string StmtsSeq::unparse() {
+  return stmt->unparse() + stmts->unparse();
+}
+
+// Stmt
+// -----------------------------------------------------------
+
+string DeclStmt::unparse() {
+  return decl->unparse() ;
+}
+
+string IfStmt::unparse() {
+  return "if " + "(" + ifExpr->unparse() + ")" + thenStmt->unparse();
+}
+
+string IfElseStmt::unparse() {
+  return "if " + "(" + ifExpr->unparse() + ")" + thenStmt->unparse() + "\n" + "else " + elseStmt->unparse();
+}
+
+string BlockStmt::unparse() {
+  return "{ \n" + statements->unparse()+ "\n}";
+}
+
+string PrintStmt::unparse() {
+  return "print (" + printExpr->unparse() + " );" ;
+}
+
+string AssignStmt::unparse() {
+  return var->unparse() + " = " + rightExpr-> unparse();
+}
+
+string LongAssignStmt::unparse() {
+  return var->unparse() + "["+ leftExpr1->unparse() + "," + leftExpr2->unparse() +"] = " + rightExpr->unparse();
+}
+
+string WhileStmt::unparse() { 
+  return "while (" + WhileExpr->unparse() + " )" + WhileStmt->unparse();
+}
+
+string ForStmt::unparse() {
+  return "for (" + var->unparse() +" = " + expr1->unparse() + ":" + expr2->unparse() + ")" + statements->unparse();
+}
+ 

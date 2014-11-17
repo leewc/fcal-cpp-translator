@@ -8,13 +8,11 @@
 
 class Node ;
 
-class RootAbs ;
+class Expr ;
+class Decl ;
+class Root ;
 class Stmts ;
 class Stmt ;
-class Expr ;
-class LExpr ;
-class Decl ;
-class VarName ;
 
 // Node
 class Node {
@@ -23,12 +21,6 @@ class Node {
 		virtual std::string cppCode ( ) { return " This should be pure virtual" ; } ;
 		virtual ~Node() { }
 } ;
-
-
-class Expr : public Node {
-} ;
-
-
 
 class Root : public Node {
 public:
@@ -103,11 +95,13 @@ class AssignStmt: public Stmt {
 
 class LongAssignStmt: public Stmt {
  public: 
-  longAssignStmt(Expr* _leftExpr, Expr* _rightExpr){};
+  longAssignStmt(VarName *_var, Expr* _leftExpr1, Expr* _leftExpr2, Expr* _rightExpr){};
   std::string unparse();
  private: 
-  Expr *leftExpr;
-  Expr *righExpr;
+  VarName *var;
+  Expr *leftExpr1;
+  Expr *leftExpr2;
+  Expr *rightExpr;
   LongAssignStmt(const longAssignStmt &){};
 }
 
@@ -193,7 +187,10 @@ private:
         LongMatrixDecl (const LongMatrixDecl &) {} ;
 } ;
 
-//Expresssions
+//Expressions
+
+class Expr : public Node {
+} ;
 
 class BinOpExpr : public Expr {
 public:
