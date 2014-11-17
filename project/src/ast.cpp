@@ -11,17 +11,6 @@ string Root::unparse () {
 Root::~Root() {}
 
 
-
-// Stmts
-// ------------------------------------------------------------
-string StmtsSeq::unparse ( ) {
-    return stmt->unparse() + stmts->unparse() ;
-}
-
-string EmptyStmts::unparse ( ) {
-    return "";
-}
-
 // Decls
 // ------------------------------------------------------------
 
@@ -86,11 +75,11 @@ string DeclStmt::unparse() {
 }
 
 string IfStmt::unparse() {
-  return "if " + "(" + ifExpr->unparse() + ")" + thenStmt->unparse();
+  return "if (" + ifExpr->unparse() + ")" + thenStmt->unparse();
 }
 
 string IfElseStmt::unparse() {
-  return "if " + "(" + ifExpr->unparse() + ")" + thenStmt->unparse() + "\n" + "else " + elseStmt->unparse();
+  return "if (" + ifExpr->unparse() + ")" + thenStmt->unparse() + "\n" + "else " + elseStmt->unparse();
 }
 
 string BlockStmt::unparse() {
@@ -110,7 +99,7 @@ string LongAssignStmt::unparse() {
 }
 
 string WhileStmt::unparse() { 
-  return "while (" + WhileExpr->unparse() + " )" + WhileStmt->unparse();
+  return "while (" + whileExpr->unparse() + " )" + whileStmt->unparse();
 }
 
 string ForStmt::unparse() {

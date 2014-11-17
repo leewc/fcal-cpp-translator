@@ -53,7 +53,7 @@ parser_tests:	parser_tests.cpp parser.o scanner.o readInput.o extToken.o regex.o
 parser_tests.cpp:	parser.o scanner.o extToken.o regex.o parser_tests.h readInput.h parseResult.h ast.o
 	$(CXXTEST) $(CXXFLAGS) -o parser_tests.cpp parser_tests.h
 
-ast_tests: ast_tests.cpp parser.h ast_tests.h readInput.h scanner.h 
+ast_tests: ast_tests.cpp ast_tests.h ast.o parser.o readInput.o extToken.o regex.o scanner.o parseResult.o 
 	g++ $(FLAGS) -I$(CXX_DIR) -o  ast_tests \
 		ast_tests.cpp readInput.o parser.o ast.o scanner.o extToken.o regex.o parseResult.o
 

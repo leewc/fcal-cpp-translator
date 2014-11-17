@@ -54,7 +54,7 @@ class IfStmt:public Stmt {
  private:
   Expr *ifExpr;
   Stmt *thenStmt;
-  IfStmt () : ifExpr(NULL), thenStmt(NULL) {}; 
+  //IfStmt () : ifExpr(NULL), thenStmt(NULL) {}; 
   IfStmt(const IfStmt &) {};
 } ;
 
@@ -66,7 +66,7 @@ class IfElseStmt: public Stmt {
    Expr *ifExpr;
    Stmt *thenStmt;
    Stmt *elseStmt;
-   IfElseStmt () : ifExpr(NULL), thenStmt(NULL), elseStmt(NULL) {} ;
+   //IfElseStmt () : ifExpr(NULL), thenStmt(NULL), elseStmt(NULL) {} ; ----> don't think we need null constructors
    IfElseStmt(const IfElseStmt &){};
 } ;
 
@@ -119,20 +119,20 @@ class WhileStmt: public Stmt {
  private:
   Expr *whileExpr;
   Stmt *whileStmt;
- WhileStmt(): whileExpr(NULL), whileStmt(NULL) {}; 
+  // WhileStmt(): whileExpr(NULL), whileStmt(NULL) {}; 
   WhileStmt(const WhileStmt &){};
 } ;
 
-class forStmt: public Stmt { 
+class ForStmt: public Stmt { 
  public:
- forStmt(VarName* _varName, Expr* _expr1, Expr* _expr2, Stmt* _stmt): var(_varName), expr1 (_expr1), expr2(_expr2),statements (_stmt) {};
+ ForStmt(VarName* _varName, Expr* _expr1, Expr* _expr2, Stmt* _stmt): var(_varName), expr1 (_expr1), expr2(_expr2),statements (_stmt) {};
   std::string unparse();
  private:
   VarName *var;
   Expr *expr1;
   Expr *expr2;
   Stmt *statements;
-  forStmt(const forStmt &){};
+  ForStmt(const ForStmt &){};
 } ;
 
 // Stmts
@@ -209,7 +209,7 @@ private:
     Expr *left ;
     std::string *op ;
     Expr *right ;
-    BinOpExpr() : left(NULL), op(NULL), right(NULL) {} ;
+    //    BinOpExpr() : left(NULL), op(NULL), right(NULL) {} ;
     BinOpExpr(const BinOpExpr &) { } ;
 } ;
 
