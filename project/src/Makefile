@@ -57,7 +57,7 @@ ast_tests: ast_tests.cpp ast_tests.h ast.o parser.o readInput.o extToken.o regex
 	g++ $(FLAGS) -I$(CXX_DIR) -o  ast_tests \
 		ast_tests.cpp readInput.o parser.o ast.o scanner.o extToken.o regex.o parseResult.o
 
-ast_tests.cpp: 	parser.h ast_tests.h readInput.h
+ast_tests.cpp: 	parser.h ast.o ast_tests.h readInput.h
 	$(CXXTEST) $(CXXFLAGS) -o ast_tests.cpp ast_tests.h
 
 clean:
