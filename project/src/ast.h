@@ -69,7 +69,7 @@ class IfElseStmt: public IfStmt {
    std::string unparse();
  private:
    Stmt *elseStmt;
-   IfElseStmt(const IfElseStmt &){}
+   IfElseStmt(const IfElseStmt &){};
 }
 
 class BlockStmt: public Stmt {
@@ -78,7 +78,7 @@ class BlockStmt: public Stmt {
   std::string unparse();
  private:
   Stmts *statements;
-  BlockStmt(const BlockStmt &){}
+  BlockStmt(const BlockStmt &){};
 }
 
 class PrintStmt: public Stmt {
@@ -87,7 +87,7 @@ class PrintStmt: public Stmt {
   std::string unparse();
  private:
   Expr *printExpr;
-  PrintStmt(const PrintStmt &){}
+  PrintStmt(const PrintStmt &){};
 }
 
 class AssignStmt: public Stmt {
@@ -97,14 +97,41 @@ class AssignStmt: public Stmt {
  private:
   VarName *var;
   Expr *rightExpr;
-  AssignStmt(const AssignStmt &){}
+  AssignStmt(const AssignStmt &){};
 }
 
-//need to continue at longAssignStmt
 
+class LongAssignStmt: public Stmt {
+ public: 
+  longAssignStmt(Expr* _leftExpr, Expr* _rightExpr){};
+  std::string unparse();
+ private: 
+  Expr *leftExpr;
+  Expr *righExpr;
+  LongAssignStmt(const longAssignStmt &){};
+}
 
+class WhileStmt: public Stmt {
+ public: 
+  whileStmt(Expr* _whileExpr, Stmt* _whileStmt){};
+  std::string unparse();
+ private:
+  Expr *WhileExpr;
+  Stmt *WhileStmt;
+  WhileStmt(const whileStmt &){};
+}
 
-
+class forStmt: public Stmt { 
+ public:
+  forStmt(VarName _varName, Expr* _expr1, Expr* _expr2, Stmt* _stmt);
+  std::string unparse();
+ private:
+  VarName *var;
+  Expr *expr1;
+  Expr *expr2;
+  Stmt *statements;
+  forStmt(const forStmt &){};
+}
 
 // Stmts
 class Stmts : public Node {} ;
