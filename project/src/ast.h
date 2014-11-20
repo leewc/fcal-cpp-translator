@@ -34,12 +34,12 @@ class Node {
 //Root
 class Root : public Node {
  public:
- //! Constructor for Root node.
+ //! Constructor for Root node.\param v varName \param s stmts
  Root(VarName *v, Stmts *s) : varName(v), stmts(s) { } ;
   std::string unparse ();
   virtual ~Root() ;
  private:
-  VarName *varName ;
+  VarName *varName ;//! VarName *varName
   Stmts *stmts ;
  Root() : varName(NULL), stmts(NULL) { } ;
   Root(const Root &) {};
