@@ -363,16 +363,37 @@ ParseResult Parser::parseVariableName ( ) {
     ParseResult pr ;
     match ( variableName ) ;
     std::string name(prevToken->lexeme);
+	VarName *var = new VarName(name);
     if(attemptMatch(leftSquare)){
-        parseExpr(0);
+        ParseResult prExpr1 = parseExpr(0);
         match(comma);
-        parseExpr(0);
+        ParseResult prExpr2 = parseExpr(0);
         match(rightSquare);
+	Expr *expr1 = NULL;
+	if(prExpr1.ast)
+	{
+	  expr1 = dynamic_cast<Expr *>(prExpr1.ast);
+	  if(!expr1) throw((string) "Bad cast to Expr in parseVariableName expr1");
+	}
+	Expr *expr2 = NULL;
+	if(prExpr2.ast)
+	{
+	  expr2 = dynamic_cast<Expr *>(prExpr2.ast);
+	  if(!expr2) throw((string) "Bad cast to Expr in parseVariableName expr2");
+	}
+	pr.ast = new MatrixRefExpr(var,expr1,expr2);
     }
     //Expr ::= varableName '(' Expr ')'        //NestedOrFunctionCall
     else if(attemptMatch(leftParen)){
-        parseExpr(0);
+        ParseResult prExpr = parseExpr(0);
         match(rightParen);
+	Expr *expr = NULL;
+	if(prExpr.ast)
+	{
+	  expr = dynamic_cast<Expr *>(prExpr.ast);
+	  if(!expr) throw((string) "Bad cast to Expr in parseVariableName expr");
+	}
+	pr.ast = new NestOrFuncExpr(var,expr);
     }
     //Expr := variableName
     else{
@@ -387,9 +408,9 @@ ParseResult Parser::parseVariableName ( ) {
 ParseResult Parser::parseNestedExpr ( ) {
     ParseResult pr ;
     match ( leftParen ) ;
-    parseExpr(0) ; 
-    pr.ast = new ParenExpr(prevToken->lexeme);
+    ParseResult prExpr = parseExpr(0) ; 
     match(rightParen) ;
+//    pr.ast = new ParenExpr(prExpr.ast);
     return pr ;
 }
 
