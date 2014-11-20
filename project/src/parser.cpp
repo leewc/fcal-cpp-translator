@@ -338,7 +338,7 @@ ParseResult Parser::parseExpr (int rbp) {
 ParseResult Parser::parseIntConst ( ) {
     ParseResult pr ;
     match ( intConst ) ;
-    pr.ast = new AnyConst(prevToken->lexeme);   ////////////////// this was where the first seg fault was caused. 
+    pr.ast = new AnyConst(currToken->lexeme);   ////////////////// this was where the first seg fault was caused. 
     return pr ;
 }
 
@@ -388,7 +388,7 @@ ParseResult Parser::parseNestedExpr ( ) {
     ParseResult pr ;
     match ( leftParen ) ;
     parseExpr(0) ; 
-    pr.ast = new ParenExpr(prevToken->lexeme);
+    //pr.ast = new ParenExpr(prevToken->lexeme);
     match(rightParen) ;
     return pr ;
 }
