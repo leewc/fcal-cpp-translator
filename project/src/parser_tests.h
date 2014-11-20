@@ -23,6 +23,8 @@ public:
     void test_simple() {
          const char *text = ("main(){number = 1 + 2;}");
          ParseResult pr = p->parse(text);
+	string msg("simple");
+	msg += "\n" + pr.errors;
          TS_ASSERT(pr.ok);
     }
 
