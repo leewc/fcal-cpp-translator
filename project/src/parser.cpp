@@ -338,7 +338,7 @@ ParseResult Parser::parseExpr (int rbp) {
 ParseResult Parser::parseIntConst ( ) {
     ParseResult pr ;
     match ( intConst ) ;
-    pr.ast = new AnyConst(currToken->lexeme);   ////////////////// this was where the first seg fault was caused. 
+    pr.ast = new AnyConst(prevToken->lexeme);   ////////////////// this was where the first seg fault was caused. 
     return pr ;
 }
 
@@ -346,6 +346,7 @@ ParseResult Parser::parseIntConst ( ) {
 ParseResult Parser::parseFloatConst ( ) {
     ParseResult pr ;
     match ( floatConst ) ;
+    pr.ast = new AnyConst(prevToken->lexeme);
     return pr ;
 }
 
@@ -353,6 +354,7 @@ ParseResult Parser::parseFloatConst ( ) {
 ParseResult Parser::parseStringConst ( ) {
     ParseResult pr ;
     match ( stringConst ) ;
+    pr.ast = new AnyConst(prevToken->lexeme);
     return pr ;
 }
 
@@ -360,6 +362,7 @@ ParseResult Parser::parseStringConst ( ) {
 ParseResult Parser::parseVariableName ( ) {
     ParseResult pr ;
     match ( variableName ) ;
+    std::string name(prevToken->lexeme);
     if(attemptMatch(leftSquare)){
         parseExpr(0);
         match(comma);
@@ -374,6 +377,7 @@ ParseResult Parser::parseVariableName ( ) {
     //Expr := variableName
     else{
         // variable 
+        pr.ast = new VarName(name);
     }
     return pr ;
 }
@@ -384,6 +388,7 @@ ParseResult Parser::parseNestedExpr ( ) {
     ParseResult pr ;
     match ( leftParen ) ;
     parseExpr(0) ; 
+    pr.ast = new ParenExpr(prevToken->lexeme);
     match(rightParen) ;
     return pr ;
 }
