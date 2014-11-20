@@ -1,10 +1,7 @@
-/*! A recursive descent parser with operator precedence.
-   \file parser.cpp
-   \brief The parser .cpp file
+/* A recursive descent parser with operator precedence.
+
    Author: Eric Van Wyk
-   Modified: Robert Edge    
-   Modified: Sophia Stembridge
-   Modified: Wen Chuan Lee
+   Modified: Robert Edge        
 
    This algorithm is based on the work of Douglas Crockford in "Top
    Down Operator Precedence", a chapter in the book "Beautiful Code".
@@ -22,7 +19,7 @@
    These are both quite interesting works and worth reading if you
    find the problem of parsing to be an interesting one.
 
-   Last modified: Nov. 20 2014.
+   Last modified: Oct 13, 2013.
 
 */
 
@@ -59,7 +56,7 @@ Parser::~Parser() {
 }
 
 
-/*! Constructor for parser*/
+/*! Here's the constructor for parser*/
 Parser::Parser ( ) { 
     currToken = NULL; prevToken = NULL ; tokens = NULL; 
     s = NULL; stokens = NULL; 
@@ -103,9 +100,7 @@ void Parser::initialzeParser (const char* text) {
  */
 
 
-/*! \fn ParseResult Parser::parseProgram ()
-    \brief Begins parsing, attaches Root node for ast
-*/
+// Program
 ParseResult Parser::parseProgram () {
     ParseResult pr ;
     // root
@@ -134,9 +129,8 @@ ParseResult Parser::parseProgram () {
 }
 
 
-/*! \fn ParseResult Parser::parseMatrixDecl ()
-    \brief identical purpose of parseDecl, handles special matrix syntax.
-*/
+// MatrixDecl
+// identical purpose of parseDecl, handles special matrix syntax.
 ParseResult Parser::parseMatrixDecl () {
     ParseResult pr ;
     match(matrixKwd);
@@ -144,7 +138,8 @@ ParseResult Parser::parseMatrixDecl () {
 
     // Decl ::= 'Matrix' varName '[' Expr ',' Expr ']' varName ',' varName  '=' Expr ';'
     if(attemptMatch(leftSquare)){
-        parseExpr(0);
+        ParseResult firstPr = parseExpr(0);
+		//Expr* 
         match(comma);
         parseExpr(0);
         match(rightSquare);
@@ -166,23 +161,18 @@ ParseResult Parser::parseMatrixDecl () {
 
     return pr ;
 }
-/*! \fn ParseResult Parser::parseStandardDecl()
-    \brief Parses standardDecl and make proper ast node
-    Decl ::= integerKwd varName | floatKwd varName | stringKwd varName
-*/
+//standardDecl 
+//Decl ::= integerKwd varName | floatKwd varName | stringKwd varName
 ParseResult Parser::parseStandardDecl(){
     ParseResult pr ;
     
-    //ParseResult prType = parseType() ;
-
+    //ParseResult prType = parseType() ; 
     if ( attemptMatch(intKwd) ) {
         // Type ::= intKwd 
-      //VarName var = new VarName (
-      //pr.ast = new SimpleDecl (prevToken->lexeme,); ////////////////////////////////////////////////// 
     } 
     else if ( attemptMatch(floatKwd) ) {
-        // Type ::= floatKwd
-    }
+        // Type ::= floatKwd}
+	}
     else if ( attemptMatch(stringKwd) ) {
         // Type ::= stringKwd
     }
@@ -190,11 +180,13 @@ ParseResult Parser::parseStandardDecl(){
         // Type ::= boolKwd
     }
     match(variableName) ;
+    VarName *var = new VarName (currToken->lexeme);
+      pr.ast = new SimpleDecl (prevToken->lexeme,var);  
     match(semiColon) ;
     return pr ;
 }
 
-//! Decl
+// Decl
 ParseResult Parser::parseDecl () {
     ParseResult pr ;
     // Decl :: Matrix variableName ....
@@ -314,8 +306,9 @@ ParseResult Parser::parseExpr (int rbp) {
        'led' methods that are dispatchers that call the appropriate
        parse methods.*/
     ParseResult left = currToken->nud() ;
-   
+    //cout << "rbp is:" << rbp <<endl;
     while (rbp < currToken->lbp() ) {
+	//	cout << currToken->lbp() <<endl;
         left = currToken->led(left) ;
     }
 
@@ -375,9 +368,9 @@ ParseResult Parser::parseVariableName ( ) {
     std::string name(prevToken->lexeme);
 	VarName *var = new VarName(name);
     if(attemptMatch(leftSquare)){
-        ParseResult prExpr1 = parseExpr(0);
+        ParseResult prExpr1 = parseExpr(currToken->lbp());
         match(comma);
-        ParseResult prExpr2 = parseExpr(0);
+        ParseResult prExpr2 = parseExpr(currToken->lbp());
         match(rightSquare);
 	Expr *expr1 = dynamic_cast<Expr *>(prExpr1.ast);
 	Expr *expr2 = dynamic_cast<Expr *>(prExpr2.ast);
@@ -385,7 +378,7 @@ ParseResult Parser::parseVariableName ( ) {
     }
     //Expr ::= varableName '(' Expr ')'        //NestedOrFunctionCall
     else if(attemptMatch(leftParen)){
-        ParseResult prExpr = parseExpr(0);
+        ParseResult prExpr = parseExpr(currToken->lbp());
         match(rightParen);
 	Expr *expr = NULL;
 	if(prExpr.ast)
@@ -408,10 +401,12 @@ ParseResult Parser::parseVariableName ( ) {
 ParseResult Parser::parseNestedExpr ( ) {
     ParseResult pr ;
     match ( leftParen ) ;
-    ParseResult prExpr = parseExpr(prevToken->lbp()) ; 
+    //parseExpr(0) ;
+	ParseResult prCur = parseExpr(0);   					//TODO
+	Expr *curExpr = dynamic_cast<Expr *>(prCur.ast);
     //pr.ast = new ParenExpr(prevToken->lexeme);
     match(rightParen) ;
-//    pr.ast = new ParenExpr(prExpr.ast);
+	pr.ast = new ParenExpr(curExpr);
     return pr ;
 }
 
@@ -420,15 +415,18 @@ ParseResult Parser::parseIfExpr(){
      ParseResult pr ; 
     
     match(ifKwd);
-    //ParseResult prExpr = parseExpr(prevToken->lbp());
-    parseExpr(0);
-    //Expr *ifExpr = dynamic_cast<Expr *>(prExpr.ast);
+    ParseResult prExpr = parseExpr(currToken->lbp());
+    //parseExpr(0);
+    Expr *ifExpr = dynamic_cast<Expr *>(prExpr.ast);
     match(thenKwd);
-    //prExpr = parseExpr(prevToken->lbp());
-    //Expr /////////////
-    parseExpr(0);
+    prExpr = parseExpr(currToken->lbp());
+    Expr *thenExpr = dynamic_cast<Expr *>(prExpr.ast);
+    //parseExpr(0);
     match(elseKwd);
-    parseExpr(0);
+    //parseExpr(0);
+	prExpr = parseExpr(currToken->lbp());
+	Expr *elseExpr = dynamic_cast<Expr *>(prExpr.ast);
+	pr.ast = new IfElseExpr(ifExpr,thenExpr,elseExpr);
 
     return pr;
 }
