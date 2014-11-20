@@ -84,7 +84,7 @@ string NestOrFuncExpr::unparse() {
     \brief Unparse for ParenExpr node : '(' Expr ')'
 */
 string ParenExpr::unparse() {
-       return "(" + expr->unparse + ")";
+       return "(" + expr->unparse() + ")";
 }
 
 /*! \fn string LetExpr::unparse()
