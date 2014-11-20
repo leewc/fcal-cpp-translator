@@ -115,7 +115,7 @@ ParseResult Parser::parseProgram () {
     match(endOfFile) ;
 
     /* November 20 12:17AM this is commented out because it causes a seg fault ... -Lee
-    //create a program
+    //create a program */
 	VarName *v = new VarName(name);
 	Stmts *s = NULL;
 	if (prStmts.ast)
@@ -123,8 +123,8 @@ ParseResult Parser::parseProgram () {
 		s = dynamic_cast<Stmts *>(prStmts.ast); //empty statements is a subclass of stmts
 		if(!s) throw ((string) "Bad cast of Stmts in parseProgram");
 	}
- pr.ast = new Root(v,s);
-    */
+	
+	pr.ast = new Root(v,s);
     return pr ;
 }
 
@@ -168,7 +168,9 @@ ParseResult Parser::parseStandardDecl(){
     //ParseResult prType = parseType() ;
 
     if ( attemptMatch(intKwd) ) {
-        // Type ::= intKwd
+        // Type ::= intKwd 
+      //VarName var = new VarName (
+      //pr.ast = new SimpleDecl (prevToken->lexeme,); ////////////////////////////////////////////////// 
     } 
     else if ( attemptMatch(floatKwd) ) {
         // Type ::= floatKwd
@@ -336,6 +338,7 @@ ParseResult Parser::parseExpr (int rbp) {
 ParseResult Parser::parseIntConst ( ) {
     ParseResult pr ;
     match ( intConst ) ;
+    pr.ast = new AnyConst(currToken->lexeme);   ////////////////// this was where the first seg fault was caused. 
     return pr ;
 }
 
