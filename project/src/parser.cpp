@@ -1,7 +1,10 @@
-/* A recursive descent parser with operator precedence.
-
+/*! A recursive descent parser with operator precedence.
+   \file parser.cpp
+   \brief The parser .cpp file
    Author: Eric Van Wyk
-   Modified: Robert Edge        
+   Modified: Robert Edge    
+   Modified: Sophia Stembridge
+   Modified: Wen Chuan Lee
 
    This algorithm is based on the work of Douglas Crockford in "Top
    Down Operator Precedence", a chapter in the book "Beautiful Code".
@@ -19,7 +22,7 @@
    These are both quite interesting works and worth reading if you
    find the problem of parsing to be an interesting one.
 
-   Last modified: Oct 13, 2013.
+   Last modified: Nov. 20 2014.
 
 */
 
@@ -56,7 +59,7 @@ Parser::~Parser() {
 }
 
 
-/*! Here's the constructor for parser*/
+/*! Constructor for parser*/
 Parser::Parser ( ) { 
     currToken = NULL; prevToken = NULL ; tokens = NULL; 
     s = NULL; stokens = NULL; 
@@ -100,7 +103,9 @@ void Parser::initialzeParser (const char* text) {
  */
 
 
-// Program
+/*! \fn ParseResult Parser::parseProgram ()
+    \brief Begins parsing, attaches Root node for ast
+*/
 ParseResult Parser::parseProgram () {
     ParseResult pr ;
     // root
@@ -129,8 +134,9 @@ ParseResult Parser::parseProgram () {
 }
 
 
-// MatrixDecl
-// identical purpose of parseDecl, handles special matrix syntax.
+/*! \fn ParseResult Parser::parseMatrixDecl ()
+    \brief identical purpose of parseDecl, handles special matrix syntax.
+*/
 ParseResult Parser::parseMatrixDecl () {
     ParseResult pr ;
     match(matrixKwd);
@@ -160,8 +166,10 @@ ParseResult Parser::parseMatrixDecl () {
 
     return pr ;
 }
-//standardDecl 
-//Decl ::= integerKwd varName | floatKwd varName | stringKwd varName
+/*! \fn ParseResult Parser::parseStandardDecl()
+    \brief Parses standardDecl and make proper ast node
+    Decl ::= integerKwd varName | floatKwd varName | stringKwd varName
+*/
 ParseResult Parser::parseStandardDecl(){
     ParseResult pr ;
     
@@ -186,7 +194,7 @@ ParseResult Parser::parseStandardDecl(){
     return pr ;
 }
 
-// Decl
+//! Decl
 ParseResult Parser::parseDecl () {
     ParseResult pr ;
     // Decl :: Matrix variableName ....
