@@ -92,6 +92,8 @@ void Parser::initialzeParser (const char* text) {
 
         assert (tokens != NULL) ;
 }
+
+
 /* 
  * parse methods for non-terminal symbols
  * --------------------------------------
@@ -112,8 +114,8 @@ ParseResult Parser::parseProgram () {
     match(rightCurly);
     match(endOfFile) ;
 
-
-//create a program
+    /* November 20 12:17AM this is commented out because it causes a seg fault ... -Lee
+    //create a program
 	VarName *v = new VarName(name);
 	Stmts *s = NULL;
 	if (prStmts.ast)
@@ -122,7 +124,7 @@ ParseResult Parser::parseProgram () {
 		if(!s) throw ((string) "Bad cast of Stmts in parseProgram");
 	}
  pr.ast = new Root(v,s);
-    
+    */
     return pr ;
 }
 
@@ -422,24 +424,22 @@ ParseResult Parser::parseNotExpr () {
 ParseResult Parser::parseAddition ( ParseResult prLeft ) {
     // parser has already matched left expression 
     ParseResult pr ;
-
 	//we added this
 	Expr *left = dynamic_cast<Expr *> (prLeft.ast);
-	if (!left) throw( (string) "bad cast in left expr in parseAddition");
+	//if (!left) throw( (string) "bad cast in left expr in parseAddition");
 
 
-    match ( plusSign ) ;
+	match ( plusSign ) ;
 	string * op = new string(prevToken->lexeme);
-    //parseExpr( prevToken->lbp() ); 
+	//parseExpr( prevToken->lbp() ); 
     
 	ParseResult prRight = parseExpr( prevToken->lbp() ); 
     	Expr *right = dynamic_cast<Expr *>(prRight.ast);
-	if(!right) throw((string) "Bad cast in right expr in parseAddition");
+	//	if(!right) throw((string) "Bad cast in right expr in parseAddition");
 
 	pr.ast = new BinOpExpr(left, op, right);
-	
 
-return pr ;
+	return pr ;
 }
 
 // Expr ::= Expr star Expr

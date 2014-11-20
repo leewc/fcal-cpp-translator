@@ -28,7 +28,7 @@ parseResult.o:	parseResult.cpp parseResult.h ast.h
 	g++ $(FLAGS) -c parseResult.cpp
 
 # Testing files and targets.
-run-tests:	regex_tests scanner_tests parser_tests 
+run-tests:	regex_tests scanner_tests parser_tests ast_tests
 	./regex_tests
 	./scanner_tests
 	./parser_tests

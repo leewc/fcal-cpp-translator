@@ -21,7 +21,7 @@ public:
     }
     
     void test_simple() {
-         const char *text = ("main(){number = 1 + 2}");
+         const char *text = ("main(){number = 1 + 2;}");
          ParseResult pr = p->parse(text);
          TS_ASSERT(pr.ok);
     }
