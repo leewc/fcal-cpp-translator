@@ -449,8 +449,14 @@ ParseResult Parser::parseAddition ( ParseResult prLeft ) {
 ParseResult Parser::parseMultiplication ( ParseResult prLeft ) {
     // parser has already matched left expression 
     ParseResult pr ;
+    Expr *left = dynamic_cast<Expr *> (prLeft.ast);
     match ( star ) ;
-    parseExpr( prevToken->lbp() ); 
+    string* op = new string(prevToken->lexeme);
+    ParseResult prRight = parseExpr (prevToken->lbp());
+    Expr *right = dynamic_cast<Expr *>(prRight.ast);
+
+    //parseExpr( prevToken->lbp() );
+    pr.ast = new BinOpExpr (left, op,right); //////////////////the rest of the BinOps follow this as well. 
     return pr ;
 }
 
