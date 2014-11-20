@@ -324,13 +324,15 @@ ParseResult Parser::parseExpr (int rbp) {
  ParseResult Parser::parseTrueKwd ( ) {
      ParseResult pr ;
      match ( trueKwd ) ;
+     pr.ast = new AnyConst(currToken->lexeme);
      return pr ;
  }
 
- // Expr ::= trueKwd
+ // Expr ::= falseKwd
  ParseResult Parser::parseFalseKwd ( ) {
      ParseResult pr ;
      match ( falseKwd ) ;
+     pr.ast = new AnyConst(currToken->lexeme);
      return pr ;
  }
 
@@ -346,7 +348,7 @@ ParseResult Parser::parseIntConst ( ) {
 ParseResult Parser::parseFloatConst ( ) {
     ParseResult pr ;
     match ( floatConst ) ;
-    pr.ast = new AnyConst(prevToken->lexeme);
+    pr.ast = new AnyConst(currToken->lexeme);
     return pr ;
 }
 
@@ -354,7 +356,7 @@ ParseResult Parser::parseFloatConst ( ) {
 ParseResult Parser::parseStringConst ( ) {
     ParseResult pr ;
     match ( stringConst ) ;
-    pr.ast = new AnyConst(prevToken->lexeme);
+    pr.ast = new AnyConst(currToken->lexeme);
     return pr ;
 }
 
@@ -398,8 +400,12 @@ ParseResult Parser::parseIfExpr(){
      ParseResult pr ; 
     
     match(ifKwd);
+    //ParseResult prExpr = parseExpr(prevToken->lbp());
     parseExpr(0);
+    //Expr *ifExpr = dynamic_cast<Expr *>(prExpr.ast);
     match(thenKwd);
+    //prExpr = parseExpr(prevToken->lbp());
+    //Expr /////////////
     parseExpr(0);
     match(elseKwd);
     parseExpr(0);
@@ -412,11 +418,13 @@ ParseResult Parser::parseIfExpr(){
 ParseResult Parser::parseLetExpr(){
    ParseResult pr ;
    match(letKwd);
-   parseStmts();
+   ParseResult prStatements = parseStmts();
+   Stmts *statements = dynamic_cast<Stmts *>(prStatements.ast);
    match(inKwd);
-   parseExpr(0);
+   ParseResult prExpr = parseExpr(prevToken->lbp());
+   Expr *expr = dynamic_cast<Expr *>(prExpr.ast);
    match(endKwd);
-
+   pr.ast = new LetExpr(statements,expr);
    return pr;
 }
 
@@ -424,7 +432,10 @@ ParseResult Parser::parseLetExpr(){
 ParseResult Parser::parseNotExpr () {
     ParseResult pr ;
     match ( notOp ) ;
-    parseExpr( 0 ); 
+    ParseResult prNot = parseExpr (prevToken->lbp());
+    //parseExpr( 0 );
+    Expr *expr = dynamic_cast<Expr *>(prNot.ast);
+    pr.ast = new NotExpr(expr);
     return pr ;
 
 }
@@ -469,17 +480,27 @@ ParseResult Parser::parseMultiplication ( ParseResult prLeft ) {
 ParseResult Parser::parseSubtraction ( ParseResult prLeft ) {
     // parser has already matched left expression 
     ParseResult pr ;
+    Expr *left = dynamic_cast<Expr *> (prLeft.ast);
     match ( dash ) ;
-    parseExpr( prevToken->lbp() ); 
+    string* op = new string(prevToken->lexeme);
+    ParseResult prRight = parseExpr (prevToken->lbp());
+    Expr *right = dynamic_cast<Expr *>(prRight.ast);
+
+    //parseExpr( prevToken->lbp() );
+    pr.ast = new BinOpExpr (left, op,right); //////////////////the rest of the BinOps follow this as well. 
     return pr ;
 }
 
 // Expr ::= Expr forwardSlash Expr
 ParseResult Parser::parseDivision ( ParseResult prLeft ) {
-    // parser has already matched left expression 
+    // parser has already matched left expression
     ParseResult pr ;
+    Expr *left = dynamic_cast<Expr *> (prLeft.ast);
     match ( forwardSlash ) ;
-    parseExpr( prevToken->lbp() ); 
+    string* op = new string(prevToken->lexeme);
+    ParseResult prRight = parseExpr (prevToken->lbp());
+    Expr *right = dynamic_cast<Expr *>(prRight.ast);
+    pr.ast = new BinOpExpr(left,op,right);
     return pr ;
 }
 
@@ -500,13 +521,16 @@ ParseResult Parser::parseDivision ( ParseResult prLeft ) {
 ParseResult Parser::parseRelationalExpr ( ParseResult prLeft ) {
     // parser has already matched left expression 
     ParseResult pr ;
-
+    Expr *left = dynamic_cast<Expr *>(prLeft.ast);
     nextToken( ) ;
     // just advance token, since examining it in parseExpr caused
     // this method being called.
-    string op = prevToken->lexeme ;
-
-    parseExpr( prevToken->lbp() ); 
+    string* op = new string(prevToken->lexeme) ;
+    ParseResult prRight = parseExpr (prevToken->lbp());
+    
+    Expr *right = dynamic_cast<Expr *>(prRight.ast);
+    pr.ast = new BinOpExpr(left,op,right);
+   
     return pr ;
 }
 
