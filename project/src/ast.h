@@ -1,3 +1,10 @@
+/*! \file ast.h
+    \brief The abstract syntax tree header file
+    \author Sophia Stembridge
+    \author Wen Chuan Lee
+    
+*/
+
 #ifndef Node_H
 #define Node_H
 
@@ -7,7 +14,6 @@
 #include "scanner.h"
 
 class Node ;
-
 class Expr ;
 class Decl ;
 class Root ;
@@ -15,7 +21,7 @@ class Stmts ;
 class Stmt ;
 class VarName;
 
-// Node
+//Node
 class Node {
 	public:
 		virtual std::string unparse ( ) { return " This should be pure virtual ";} ;
@@ -23,6 +29,7 @@ class Node {
 		virtual ~Node() { };
 } ;
 
+//Root
 class Root : public Node {
  public:
  Root(VarName *v, Stmts *s) : varName(v), stmts(s) { } ;
@@ -35,7 +42,7 @@ class Root : public Node {
   Root(const Root &) {};
 } ;
 
-// Stmt
+//Stmt
 class Stmt: public Node {} ;
 
 class DeclStmt: public Stmt {
@@ -135,7 +142,7 @@ class ForStmt: public Stmt {
   ForStmt(const ForStmt &){};
 } ;
 
-// Stmts
+//Stmts
 class Stmts : public Node {} ;
 
 class EmptyStmts : public Stmts {
@@ -157,7 +164,7 @@ private:
     StmtsSeq (const StmtsSeq &) {} ;
 } ;
 
-//Decls
+//Decl
 class Decl : public Node {
 };
 
@@ -195,8 +202,7 @@ private:
         LongMatrixDecl (const LongMatrixDecl &) {} ;
 } ;
 
-//Expressions
-
+//Expr
 class Expr : public Node {
 } ;
 
@@ -213,8 +219,6 @@ private:
     BinOpExpr(const BinOpExpr &) { } ;
 } ;
 
-
-// VarName
 class VarName : public Expr {
 public:
     VarName(std::string _lexeme ) : lexeme(_lexeme) { } ;
@@ -244,6 +248,15 @@ private:
         Expr *expr;
         NestOrFuncExpr(const NestOrFuncExpr &) {};
 };
+
+class ParenExpr : public Expr {
+public:
+    ParenExpr(Expr *_expr) : expr(_expr) {} ;
+    std::string unparse ( ) ;
+private:
+    Expr *expr;
+    ParenExpr (const ParenExpr &) { } ;
+} ;
 
 class MatrixRefExpr : public Expr {
 public:
