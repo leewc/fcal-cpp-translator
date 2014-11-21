@@ -95,7 +95,7 @@ void Parser::initialzeParser (const char* text) {
 
 
 /* 
- * parse methods for non-terminal symbols
+ * !parse methods for non-terminal symbols
  * --------------------------------------
  */
 
@@ -448,14 +448,14 @@ ParseResult Parser::parseVariableName ( ) {
 	Expr *expr2 = dynamic_cast<Expr *>(prExpr2.ast);
 	pr.ast = new MatrixRefExpr(var,expr1,expr2);
     }
-    //Expr ::= varableName '(' Expr ')'        //NestedOrFunctionCall
+    //! Expr ::= varableName '(' Expr ')'        //NestedOrFunctionCall
     else if(attemptMatch(leftParen)){
         ParseResult prExpr = parseExpr(0);
         match(rightParen);
 	Expr *expr = dynamic_cast<Expr *>(prExpr.ast);
 	pr.ast = new NestOrFuncExpr(var,expr);
     }
-    //Expr := variableName
+    //! Expr := variableName
     else{
         // variable 
         pr.ast = new VarName(name);
@@ -520,7 +520,7 @@ ParseResult Parser::parseNotExpr () {
 
 }
 
-// Expr ::= Expr plusSign Expr
+//! Expr ::= Expr plusSign Expr
 ParseResult Parser::parseAddition ( ParseResult prLeft ) {
   // parser has already matched left expression 
   ParseResult pr ;
@@ -541,7 +541,7 @@ ParseResult Parser::parseAddition ( ParseResult prLeft ) {
   return pr ;
 }
 
-// Expr ::= Expr star Expr
+//! Expr ::= Expr star Expr
 ParseResult Parser::parseMultiplication ( ParseResult prLeft ) {
   // parser has already matched left expression 
   ParseResult pr ;
@@ -556,7 +556,7 @@ ParseResult Parser::parseMultiplication ( ParseResult prLeft ) {
   return pr ;
 }
 
-// Expr ::= Expr dash Expr
+//! Expr ::= Expr dash Expr
 ParseResult Parser::parseSubtraction ( ParseResult prLeft ) {
   // parser has already matched left expression 
   ParseResult pr ;
@@ -571,7 +571,7 @@ ParseResult Parser::parseSubtraction ( ParseResult prLeft ) {
   return pr ;
 }
 
-// Expr ::= Expr forwardSlash Expr
+//! Expr ::= Expr forwardSlash Expr
 ParseResult Parser::parseDivision ( ParseResult prLeft ) {
   // parser has already matched left expression
   ParseResult pr ;
