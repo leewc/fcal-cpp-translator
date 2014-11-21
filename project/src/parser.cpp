@@ -161,8 +161,8 @@ ParseResult Parser::parseMatrixDecl () {
 
     return pr ;
 }
-//standardDecl 
-//Decl ::= integerKwd varName | floatKwd varName | stringKwd varName
+//!standardDecl 
+//!Decl ::= integerKwd varName | floatKwd varName | stringKwd varName
 ParseResult Parser::parseStandardDecl(){
     ParseResult pr ;
     
