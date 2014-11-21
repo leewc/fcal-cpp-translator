@@ -35,20 +35,24 @@ public:
     }
 
 
-
+    /*! Helper function for unparse_tests.
+      \param {string file} The function will take in the fileName which contains the DSL file to be parsed and tested on.
+      \return void funciton, but contains assertions that will cause the Cxx-Testing framework to halt and report failure. 
+       (failed assertions do NOT crash the framework)
+     */
     void unparse_tests ( string file ) {
         string path = "../samples/" + file ; 
 
-        // 1. Test that the file can be parsed.
+        //! 1. Test that the file can be parsed.
         ParseResult pr1 = p.parse ( 
             readInput (2, makeArgs("translator", path.c_str() ) ) 
           ) ;
         TSM_ASSERT ( file + " failed to parse.", pr1.ok ) ;
 
-        // 2. Verify that the ast field is not null
+        //! 2. Verify that the ast field is not null
         TSM_ASSERT ( file + " failed to generate an AST.", pr1.ast != NULL );
 
-        // 3. Verify that the "unparsing" is non-empty.
+        //! 3. Verify that the "unparsing" is non-empty.
         string up1 = pr1.ast->unparse() ;
 	//cout << "pass!" << endl;
 	//cout << up1 << endl;
@@ -56,16 +60,16 @@ public:
         TSM_ASSERT ( file + " failed to generate non-empty unparsing.", 
                      up1.length() > 0 ) ;
 
-        // 4. Verify that the un-parsed string can be parsed.
+        //! 4. Verify that the un-parsed string can be parsed.
         ParseResult pr2 = p.parse ( up1.c_str() ) ;
         TSM_ASSERT ( file + " failed to parse the first un-parsing.", 
                      pr2.ok ) ;
 
-        // 5. Verify that the ast field is not null after first unparsing
+        //! 5. Verify that the ast field is not null after first unparsing
         TSM_ASSERT ( file + " first unparsing failed to generate an AST.", 
                      pr2.ast != NULL );
 
-        // 6. Verify that this second unparsing can be parsed.
+        //! 6. Verify that this second unparsing can be parsed.
         string up2 = pr2.ast->unparse() ;
         writeFile(up2,(path+"up2").c_str());
         ParseResult pr3 = p.parse ( up2.c_str() ) ;
@@ -74,18 +78,38 @@ public:
 
         string up3 = pr3.ast->unparse() ;
         writeFile(up3,(path+"up3").c_str());
-        // 7. Verify that the first and second unparsings are the same.
+        //! 7. Verify that the first and second unparsings are the same.
         TSM_ASSERT_EQUALS ( file + " unparse-1 != unparse-2.", up1, up2 ) ;
-        // 8. Verifty that the second and third unparsings are the same.
+        //! 8. Verifty that the second and third unparsings are the same.
         TSM_ASSERT_EQUALS ( file + " unparse-2 != unparse-3.", up2, up3 ) ;
     }
 
+    //! Test on a DSL file with simple syntax. 
+    //! Test implemented and passed on November 20th at 5.00PM
     void test_sample_1 ( void ) { unparse_tests ( "sample_1.dsl" ); }
+
+    //! Test on DSL file with slightly more complicated syntax, does not contain Matrix declarations.
+    //! Test implemented and passed on November 20th at 6:00PM 
     void test_sample_2 ( void ) { unparse_tests ( "sample_2.dsl" ); }
+
+    //! Test on DSL file that contains Matrix declarations, syntax used is much more complicated.
+    //! Test implemented and passed on November 20th at 6:00PM
     void test_sample_3 ( void ) { unparse_tests ( "sample_3.dsl" ); }
+
+    //! Simple syntax as well as use of 'print' function in DSL. 
+    //! Test implmented and passed on November 20th at 6:00PM
     void test_sample_4 ( void ) { unparse_tests ( "sample_4.dsl" ); }
+
+    //! Lengthy DSL code file that uses a variety of syntax, one of the most complicated files to be parsed by the translator.
+    //! Test implmented and passed on November 20th at 6:15PM
     void test_sample_5 ( void ) { unparse_tests ( "sample_5.dsl" ); }
+
+    //! Simple sample DSL file written by Wen Chuan Lee and Sophia Stembridge that implements the while loop.
+    //! Test implemented and passed on November 20th at 6:15 PM 
     void test_mysample ( void ) { unparse_tests ( "mysample.dsl" ); }
+
+    //! Full DSL program that calculated forest loss. 
+    //! Test implemented and passed on November 20th at 6:15PM (this test passed with the previous 3)
     void test_forest_loss ( void ) { unparse_tests ( "forest_loss_v2.dsl" ); }
 
 
