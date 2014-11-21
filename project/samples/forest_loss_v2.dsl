@@ -7,7 +7,7 @@
 main() {
 
   // Read in satellite data - To Design
-  Matrix data = readMatrix ( "../samples/myData.dat" ) ;
+  Matrix data = readMatrix ( "../samples/myData.data" ) ;
 
  Int rows;
   rows = numRows(data);
