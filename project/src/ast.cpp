@@ -27,21 +27,21 @@ Root::~Root() {}
     \brief Unparse for SimpleDecl node: integerKwd|floatKwd|stringKwd varName ';'
 */
 string SimpleDecl::unparse(){
-       return kwd + " " + var->unparse() + " ;";
+       return kwd + " " + var->unparse() + "; \n";
 }
 
 /*! \fn string MatrixDecl::unparse()
     \brief Unparse for MatrixDecl node : 'Matrix' varName '=' Expr ';'
 */
 string MatrixDecl::unparse(){
-       return "Matrix " + var1->unparse() + " = " + expr1->unparse() + " ;";
+       return "Matrix " + var1->unparse() + " = " + expr1->unparse() + ";  \n";
 }
 
 /*! \fn string LongMatrixDecl::unparse()
     \brief Unparse for LongMatrixDecl node : 'Matrix' varName '[' Expr ',' Expr ']' varName ',' varName  '=' Expr ';'
 */
 string LongMatrixDecl::unparse(){
-       return "Matrix " + var1->unparse() + " [" + expr1->unparse() + " , " + expr2->unparse() + "] " + var2->unparse() + " , " + var3->unparse() + " = " + expr3->unparse() + " ;";
+       return "Matrix " + var1->unparse() + " [" + expr1->unparse() + " , " + expr2->unparse() + "] " + var2->unparse() + " , " + var3->unparse() + " = " + expr3->unparse() + "; \n";
 }
 
 //Expr
@@ -53,7 +53,7 @@ string LongMatrixDecl::unparse(){
 */
 string BinOpExpr::unparse ( ) {
     //return "bin op";
-	return "(" + left->unparse() + " " + *op + " " + right->unparse() + ")" ;
+	return  left->unparse() + " " + *op + " " + right->unparse() ;
 }
 
 /*! \fn string VarName::unparse()
@@ -64,7 +64,7 @@ string VarName::unparse ( ) { return lexeme ; } ;
 /*! \fn string AnyConst::unparse()
     \brief Unparse for AnyConst node : integerConst | floatConst |  stringConst
 */
-string AnyConst::unparse ( ) { return constString ; } ;
+string AnyConst::unparse ( ) { return constString + " "; } ;
 
 /*! \fn string MatrixRefExpr::unparse()
     \brief Unparse for MatrixRefExpr node : varName '[' Expr ',' Expr ']'
@@ -91,7 +91,7 @@ string ParenExpr::unparse() {
     \brief Unparse for LetExpr node : 'let' Stmts 'in' Expr 'end'
 */
 string LetExpr::unparse() {
-       return "let " + stmts->unparse() + " in " + expr->unparse() + " end";
+       return "let " + stmts->unparse() + " in " + expr->unparse() + " end ";
 }
 
 /*! \fn string IfElseExpr::unparse()
@@ -115,7 +115,7 @@ string NotExpr::unparse() {
     \brief Unparse for EmptyStmts node : <<empty>>
 */
 string EmptyStmts::unparse() {
-  return "";
+  return " ";
 }
 
 /*! \fn string StmtsSeq::unparse()
@@ -167,14 +167,14 @@ string PrintStmt::unparse() {
     \brief Unparse for AssignStmt node : varName '=' Expr ';'
 */
 string AssignStmt::unparse() {
-  return var->unparse() + " = " + rightExpr-> unparse();
+  return var->unparse() + " = " + rightExpr-> unparse() + ";";
 }
 
 /*! \fn string LongAssignStmt::unparse()
     \brief Unparse for LongAssignStmt node : varName '[' Expr ',' Expr ']' '=' Expr ';'	
 */
 string LongAssignStmt::unparse() {
-  return var->unparse() + "["+ leftExpr1->unparse() + "," + leftExpr2->unparse() +"] = " + rightExpr->unparse();
+  return var->unparse() + "["+ leftExpr1->unparse() + "," + leftExpr2->unparse() +"] = " + rightExpr->unparse() +";";
 }
 
 /*! \fn string WhileStmt::unparse()

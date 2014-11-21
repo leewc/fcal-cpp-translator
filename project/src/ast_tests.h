@@ -50,8 +50,8 @@ public:
 
         // 3. Verify that the "unparsing" is non-empty.
         string up1 = pr1.ast->unparse() ;
-	cout << "pass!" << endl;
-
+	//cout << "pass!" << endl;
+	//cout << up1 << endl;
         writeFile(up1,(path+"up1").c_str());
         TSM_ASSERT ( file + " failed to generate non-empty unparsing.", 
                      up1.length() > 0 ) ;
@@ -81,12 +81,12 @@ public:
     }
 
     void test_sample_1 ( void ) { unparse_tests ( "sample_1.dsl" ); }
-    void xtest_sample_2 ( void ) { unparse_tests ( "sample_2.dsl" ); }
-    void xtest_sample_3 ( void ) { unparse_tests ( "sample_3.dsl" ); }
-    void xtest_sample_4 ( void ) { unparse_tests ( "sample_4.dsl" ); }
-    void xtest_sample_5 ( void ) { unparse_tests ( "sample_5.dsl" ); }
-    void xtest_mysample ( void ) { unparse_tests ( "mysample.dsl" ); }
-    void xtest_forest_loss ( void ) { unparse_tests ( "forest_loss_v2.dsl" ); }
+    void test_sample_2 ( void ) { unparse_tests ( "sample_2.dsl" ); }
+    void test_sample_3 ( void ) { unparse_tests ( "sample_3.dsl" ); }
+    void test_sample_4 ( void ) { unparse_tests ( "sample_4.dsl" ); }
+    void test_sample_5 ( void ) { unparse_tests ( "sample_5.dsl" ); }
+    void test_mysample ( void ) { unparse_tests ( "mysample.dsl" ); }
+    void test_forest_loss ( void ) { unparse_tests ( "forest_loss_v2.dsl" ); }
 
 
 
