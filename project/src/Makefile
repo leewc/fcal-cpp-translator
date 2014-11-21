@@ -59,8 +59,14 @@ ast_tests: ast_tests.cpp ast_tests.h ast.o parser.o readInput.o extToken.o regex
 
 ast_tests.cpp: 	parser.h ast.o ast_tests.h readInput.h
 	$(CXXTEST) $(CXXFLAGS) -o ast_tests.cpp ast_tests.h
+	
+codegeneration_tests:	codegeneration_tests.cpp
+	g++ $(FLAGS) -I$(CXX_DIR) -o codegeneration_tests readInput.o scanner.o parser.o ast.o codegeneration_tests.cpp
+
+codegeneration_tests.cpp:	codegeneration_tests.h ast.o parser.o scanner.o readInput.o 
+	$(CXXTEST) --error-printer -o codegeneration_tests.cpp codegeneration_tests.h
 
 clean:
 	rm -Rf *.o \
 		regex_tests regex_tests.cpp \
-		scanner_tests scanner_tests.cpp	parser_tests parser_tests.cpp ast_tests ast_tests.cpp
+		scanner_tests scanner_tests.cpp	parser_tests parser_tests.cpp ast_tests ast_tests.cpp codegeneration_tests codegeneration_tests.cpp
