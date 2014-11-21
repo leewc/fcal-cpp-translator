@@ -1,0 +1,7 @@
+The basics for the UML diagrams and how the ast would be implemented 
+were decided together (of course).
+In general, the work was split between Lee working with anything dealing with Stmt and Stmts code, 
+while Sophia did Expr and Decl things. (Root and Node handled together)
+After initial implementation of the ast, Sophia worked on dOxygen code and commenting, 
+especially in parser.cpp and ast.h and .cpp, as well as updating the UML diagram, 
+while Lee worked on debugging and catching errors and typos.

@@ -1,8 +1,9 @@
-/* A recursive descent parser with operator precedence.
+/*! \file parser.cpp
+   A recursive descent parser with operator precedence.
 
    Author: Eric Van Wyk
    Modified: Robert Edge        
-
+   Modified: Sophia Stembridge, Wen Chuan Lee
    This algorithm is based on the work of Douglas Crockford in "Top
    Down Operator Precedence", a chapter in the book "Beautiful Code".
    Mr. Crockford describes in his chapter how his work is based on an
@@ -19,11 +20,10 @@
    These are both quite interesting works and worth reading if you
    find the problem of parsing to be an interesting one.
 
-   Last modified: Oct 13, 2013.
+   Last modified: Nov. 20, 2014.
 
 */
 
-//TODO remember to add pr.ast = new (thing) for each parse function
 
 #include "parser.h"
 #include "scanner.h"
@@ -56,7 +56,7 @@ Parser::~Parser() {
 }
 
 
-/*! Here's the constructor for parser*/
+/*! Constructor for parser*/
 Parser::Parser ( ) { 
     currToken = NULL; prevToken = NULL ; tokens = NULL; 
     s = NULL; stokens = NULL; 
@@ -83,6 +83,7 @@ ParseResult Parser::parse (const char *text) {
     return pr ;
 }
 
+//! Function for implementation and testing purposes only
 void Parser::initialzeParser (const char* text) {
 
 	// used during dev only to be removed in final product... :D 
@@ -95,12 +96,14 @@ void Parser::initialzeParser (const char* text) {
 
 
 /* 
- * parse methods for non-terminal symbols
+ * !parse methods for non-terminal symbols
  * --------------------------------------
  */
 
 
-// Program
+/*! \fn ParseResult Parser::parseProgram ()
+    \brief Begins parsing, attaches Root node for ast
+*/ 
 ParseResult Parser::parseProgram () {
     ParseResult pr ;
     // root
@@ -129,29 +132,44 @@ ParseResult Parser::parseProgram () {
 }
 
 
-// MatrixDecl
-// identical purpose of parseDecl, handles special matrix syntax.
+/*! \fn ParseResult Parser::parseMatrixDecl ()
+    \brief identical purpose of parseDecl, handles special matrix syntax.
+*/ 
 ParseResult Parser::parseMatrixDecl () {
     ParseResult pr ;
     match(matrixKwd);
     match(variableName) ;
 
+	VarName *name = new VarName(prevToken->lexeme);
     // Decl ::= 'Matrix' varName '[' Expr ',' Expr ']' varName ',' varName  '=' Expr ';'
     if(attemptMatch(leftSquare)){
         ParseResult firstPr = parseExpr(0);
-		//Expr* 
+		Expr *firstExpr = dynamic_cast<Expr *> (firstPr.ast);
+		
+       	//Expr* 
         match(comma);
-        parseExpr(0);
+        ParseResult secondPr = parseExpr(0);
+		Expr *secondExpr = dynamic_cast<Expr *> (secondPr.ast);
+    
         match(rightSquare);
-        parseVariableName();
+		ParseResult parseVar1 = parseVariableName();
+		VarName *var1 = dynamic_cast<VarName *>(parseVar1.ast);
+		
         match(comma);
-        parseVariableName();
+        ParseResult parseVar2 = parseVariableName();
+        VarName *var2 = dynamic_cast<VarName *>(parseVar2.ast);
+        
         match(assign);
-        parseExpr(0);
+        ParseResult prExpr = parseExpr(0);
+        Expr *lastExpr = dynamic_cast<Expr *>(prExpr.ast);
+        
+        pr.ast = new LongMatrixDecl(name,var1,var2,firstExpr,secondExpr,lastExpr);
     }
     // Decl ::= 'Matrix' varName '=' Expr ';'
     else if(attemptMatch(assign)){
-        parseExpr(0);
+        ParseResult prExpr = parseExpr(0);
+        Expr *aExpr = dynamic_cast<Expr *>(prExpr.ast);
+        pr.ast = new MatrixDecl(name, aExpr);
     }
     else{
         throw ( (string) "Bad Syntax of Matrix Decl in in parseMatrixDecl" ) ;
@@ -161,27 +179,34 @@ ParseResult Parser::parseMatrixDecl () {
 
     return pr ;
 }
-//!standardDecl 
-//!Decl ::= integerKwd varName | floatKwd varName | stringKwd varName
+
+/*! \fn ParseResult Parser::parseStandardDecl()
+    \brief Parses standardDecl and make proper ast node
+    Decl ::= integerKwd varName | floatKwd varName | stringKwd varName
+*/ 
 ParseResult Parser::parseStandardDecl(){
     ParseResult pr ;
-    
+    std::string kwd;
     //ParseResult prType = parseType() ; 
     if ( attemptMatch(intKwd) ) {
         // Type ::= intKwd 
+        kwd = prevToken->lexeme;
     } 
     else if ( attemptMatch(floatKwd) ) {
         // Type ::= floatKwd}
+      kwd = prevToken->lexeme;
 	}
     else if ( attemptMatch(stringKwd) ) {
         // Type ::= stringKwd
+      kwd = prevToken->lexeme;
     }
     else if ( attemptMatch(boolKwd) ) {
         // Type ::= boolKwd
+      kwd =prevToken->lexeme;
     }
     match(variableName) ;
-    VarName *var = new VarName (currToken->lexeme);
-      pr.ast = new SimpleDecl (prevToken->lexeme,var);  
+    VarName *var = new VarName (prevToken->lexeme);
+      pr.ast = new SimpleDecl (kwd,var);  
     match(semiColon) ;
     return pr ;
 }
@@ -235,63 +260,108 @@ ParseResult Parser::parseStmt () {
 
     //Stmt ::= Decl
     if(nextIs(intKwd)||nextIs(floatKwd)||nextIs(matrixKwd)||nextIs(stringKwd)||nextIs(boolKwd)){
-        parseDecl();
+        ParseResult prDecl = parseDecl();
+        Decl * decl = dynamic_cast<Decl *>(prDecl.ast);
+        pr.ast = new DeclStmt(decl);
     }
     //Stmt ::= '{' Stmts '}'
     else if (attemptMatch(leftCurly)){
-        parseStmts() ; 
+        ParseResult prStmts = parseStmts();
+		Stmts* stmts = dynamic_cast<Stmts *>(prStmts.ast);
         match(rightCurly);
+        pr.ast = new BlockStmt(stmts);
     }   
     //Stmt ::= 'if' '(' Expr ')' Stmt
     //Stmt ::= 'if' '(' Expr ')' Stmt 'else' Stmt
     else if (attemptMatch(ifKwd)){
         match(leftParen);
-        parseExpr(0);
+        ParseResult prExpr = parseExpr(0);
+        Expr* expr = dynamic_cast<Expr *>(prExpr.ast);
         match(rightParen);
-        parseStmt();
+        ParseResult prStmt = parseStmt();
+		Stmt* stmt = dynamic_cast<Stmt *>(prStmt.ast);
+        
+        pr.ast = new IfStmt(expr,stmt);
         
         if(attemptMatch(elseKwd)){
-            parseStmt();
+            ParseResult prStmt2 = parseStmt();
+            Stmt* stmt2 = dynamic_cast<Stmt *>(prStmt.ast);
+            pr.ast = new IfElseStmt(expr,stmt,stmt2);
         }
 
     }
     //Stmt ::= varName '=' Expr ';'  | varName '[' Expr ',' Expr ']' '=' Expr ';'
     else if  ( attemptMatch (variableName) ) {
         if (attemptMatch ( leftSquare ) ) {
-              parseExpr(0);
+              VarName *var = new VarName(prevToken->lexeme);
+              ParseResult prExpr = parseExpr(0);
+              Expr *expr1 = dynamic_cast<Expr *>(prExpr.ast);
+              
               match ( comma ) ;
-              parseExpr (0) ;
+              ParseResult prExpr2 = parseExpr(0);
+              Expr *expr2 = dynamic_cast<Expr *>(prExpr2.ast);
+              
               match  ( rightSquare ) ;
+              
+              match(assign);
+			  ParseResult prExpr3 = parseExpr(0);
+			  Expr *expr3 = dynamic_cast<Expr *>(prExpr3.ast);
+			
+              pr.ast = new LongAssignStmt(var,expr1,expr2,expr3);
         }
-        match(assign);
-        parseExpr(0);
-        match(semiColon);
-
+        else {
+			VarName *var = new VarName(prevToken->lexeme);
+			match(assign);
+			ParseResult prExpr = parseExpr(0);
+            Expr *expr1 = dynamic_cast<Expr *>(prExpr.ast);
+            pr.ast = new AssignStmt(var,expr1);
+			
+			match(semiColon);
+		}
     }
     //Stmt ::= 'print' '(' Expr ')' ';'
     else if ( attemptMatch (printKwd) ) {
         match (leftParen) ;
-        parseExpr(0);
+        ParseResult prExpr = parseExpr(0);
+        Expr *expr1 = dynamic_cast<Expr *>(prExpr.ast);
+            
         match (rightParen) ;
         match (semiColon) ;
+		pr.ast = new PrintStmt(expr1);
     }
     //Stmt ::= 'for' '(' varName '=' Expr ':' Expr ')' Stmt
     else if ( attemptMatch (forKwd) ) {
         match (leftParen) ;
         match (variableName) ;
+        
+        VarName *name = new VarName(prevToken->lexeme);
+        
         match (assign) ;
-        parseExpr (0) ;
+        ParseResult prExpr = parseExpr(0);
+        Expr *expr1 = dynamic_cast<Expr *>(prExpr.ast);
+        
+        
         match (colon) ;
-        parseExpr (0) ;
+        ParseResult prExpr2 = parseExpr(0);
+        Expr *expr2 = dynamic_cast<Expr *>(prExpr2.ast);
+        
         match (rightParen) ;
-        parseStmt () ;
+        
+        
+        ParseResult prStmt = parseStmt();
+		Stmt* stmt = dynamic_cast<Stmt *>(prStmt.ast);
+        pr.ast = new ForStmt(name,expr1,expr2,stmt);
     }
     //Stmt ::= 'while' '(' Expr ')' Stmt
     else if (attemptMatch(whileKwd)) {
         match(leftParen);
-        parseExpr(0);
+        ParseResult prExpr = parseExpr(0);
+        Expr *expr1 = dynamic_cast<Expr *>(prExpr.ast);
+        
         match(rightParen);
-        parseStmt();
+        ParseResult prStmt = parseStmt();
+		Stmt* stmt = dynamic_cast<Stmt *>(prStmt.ast);
+        pr.ast = new WhileStmt(expr1,stmt);
     }
     //Stmt ::= ';
     else if ( attemptMatch (semiColon) ) {
@@ -334,7 +404,7 @@ ParseResult Parser::parseExpr (int rbp) {
  ParseResult Parser::parseTrueKwd ( ) {
      ParseResult pr ;
      match ( trueKwd ) ;
-     pr.ast = new AnyConst(currToken->lexeme);
+     pr.ast = new AnyConst(prevToken->lexeme);
      return pr ;
  }
 
@@ -342,7 +412,7 @@ ParseResult Parser::parseExpr (int rbp) {
  ParseResult Parser::parseFalseKwd ( ) {
      ParseResult pr ;
      match ( falseKwd ) ;
-     pr.ast = new AnyConst(currToken->lexeme);
+     pr.ast = new AnyConst(prevToken->lexeme);
      return pr ;
  }
 
@@ -350,7 +420,7 @@ ParseResult Parser::parseExpr (int rbp) {
 ParseResult Parser::parseIntConst ( ) {
     ParseResult pr ;
     match ( intConst ) ;
-    pr.ast = new AnyConst(currToken->lexeme);   ////////////////// this was where the first seg fault was caused. 
+    pr.ast = new AnyConst(prevToken->lexeme);   ////////////////// this was where the first seg fault was caused. 
     return pr ;
 }
 
@@ -358,7 +428,7 @@ ParseResult Parser::parseIntConst ( ) {
 ParseResult Parser::parseFloatConst ( ) {
     ParseResult pr ;
     match ( floatConst ) ;
-    pr.ast = new AnyConst(currToken->lexeme);
+    pr.ast = new AnyConst(prevToken->lexeme);
     return pr ;
 }
 
@@ -366,7 +436,7 @@ ParseResult Parser::parseFloatConst ( ) {
 ParseResult Parser::parseStringConst ( ) {
     ParseResult pr ;
     match ( stringConst ) ;
-    pr.ast = new AnyConst(currToken->lexeme);
+    pr.ast = new AnyConst(prevToken->lexeme);
     return pr ;
 }
 
@@ -377,22 +447,22 @@ ParseResult Parser::parseVariableName ( ) {
     std::string name(prevToken->lexeme);
 	VarName *var = new VarName(name);
     if(attemptMatch(leftSquare)){
-        ParseResult prExpr1 = parseExpr(currToken->lbp());
+        ParseResult prExpr1 = parseExpr(0);
         match(comma);
-        ParseResult prExpr2 = parseExpr(currToken->lbp());
+        ParseResult prExpr2 = parseExpr(0);
         match(rightSquare);
 	Expr *expr1 = dynamic_cast<Expr *>(prExpr1.ast);
 	Expr *expr2 = dynamic_cast<Expr *>(prExpr2.ast);
 	pr.ast = new MatrixRefExpr(var,expr1,expr2);
     }
-    //Expr ::= varableName '(' Expr ')'        //NestedOrFunctionCall
+    //! Expr ::= varableName '(' Expr ')'        //NestedOrFunctionCall
     else if(attemptMatch(leftParen)){
-        ParseResult prExpr = parseExpr(currToken->lbp());
+        ParseResult prExpr = parseExpr(0);
         match(rightParen);
 	Expr *expr = dynamic_cast<Expr *>(prExpr.ast);
 	pr.ast = new NestOrFuncExpr(var,expr);
     }
-    //Expr := variableName
+    //! Expr := variableName
     else{
         // variable 
         pr.ast = new VarName(name);
@@ -418,17 +488,15 @@ ParseResult Parser::parseNestedExpr ( ) {
 ParseResult Parser::parseIfExpr(){  
      ParseResult pr ; 
     match(ifKwd);
-    ParseResult prIfExpr = parseExpr(currToken->lbp());
-    Expr *ifExpr = dynamic_cast<Expr *>(prIfExpr.ast);
-    //parseExpr(0);
+    ParseResult prExpr = parseExpr(0);
+    Expr *ifExpr = dynamic_cast<Expr *>(prExpr.ast);
     match(thenKwd);
-    ParseResult prThenExpr = parseExpr(currToken->lbp());
-    Expr *thenExpr = dynamic_cast<Expr *>(prThenExpr.ast);
-    //parseExpr(0);
+    prExpr = parseExpr(0);
+    Expr *thenExpr = dynamic_cast<Expr *>(prExpr.ast);
+    
     match(elseKwd);
-    ParseResult prElseExpr = parseExpr(currToken->lbp());
-    Expr *elseExpr = dynamic_cast<Expr *>(prElseExpr.ast);
-    //parseExpr(0);
+    prExpr = parseExpr(0);
+    Expr *elseExpr = dynamic_cast<Expr *>(prExpr.ast);
     pr.ast = new IfElseExpr(ifExpr,thenExpr,elseExpr);
     return pr;
 }
@@ -441,7 +509,7 @@ ParseResult Parser::parseLetExpr(){
    ParseResult prStatements = parseStmts();
    Stmts *statements = dynamic_cast<Stmts *>(prStatements.ast);
    match(inKwd);
-   ParseResult prExpr = parseExpr(currToken->lbp());
+   ParseResult prExpr = parseExpr(0);
    Expr *expr = dynamic_cast<Expr *>(prExpr.ast);
    match(endKwd);
    pr.ast = new LetExpr(statements,expr);
@@ -452,64 +520,75 @@ ParseResult Parser::parseLetExpr(){
 ParseResult Parser::parseNotExpr () {
     ParseResult pr ;
     match ( notOp ) ;
-    ParseResult prNot = parseExpr (currToken->lbp());
-    //parseExpr( 0 );
+    ParseResult prNot = parseExpr (0);
     Expr *expr = dynamic_cast<Expr *>(prNot.ast);
     pr.ast = new NotExpr(expr);
     return pr ;
 
 }
+
 //! Expr ::= Expr plusSign Expr
 ParseResult Parser::parseAddition ( ParseResult prLeft ) {
-    // parser has already matched left expression 
-    ParseResult pr ;
-	Expr *left = dynamic_cast<Expr *> (prLeft.ast);
-	match ( plusSign ) ;
-	string * op = new string(prevToken->lexeme);
-	ParseResult prRight = parseExpr(currToken->lbp() ); 
-    	Expr *right = dynamic_cast<Expr *>(prRight.ast);
-	pr.ast = new BinOpExpr(left, op, right);
+  // parser has already matched left expression 
+  ParseResult pr ;
+  //we added this
+  Expr *left = dynamic_cast<Expr *> (prLeft.ast);
+  //if (!left) throw( (string) "bad cast in left expr in parseAddition");
 
-	return pr ;
+
+  match ( plusSign ) ;
+  string * op = new string(prevToken->lexeme);
+    
+  ParseResult prRight = parseExpr( prevToken->lbp() ); 
+  Expr *right = dynamic_cast<Expr *>(prRight.ast);
+  //if(!right) throw((string) "Bad cast in right expr in parseAddition");
+
+  pr.ast = new BinOpExpr(left, op, right);
+
+  return pr ;
 }
 
 //! Expr ::= Expr star Expr
 ParseResult Parser::parseMultiplication ( ParseResult prLeft ) {
-    // parser has already matched left expression 
-    ParseResult pr ;
-    Expr *left = dynamic_cast<Expr *> (prLeft.ast);
-    match ( star ) ;
-    string* op = new string(prevToken->lexeme);
-    ParseResult prRight = parseExpr (currToken->lbp());
-    Expr *right = dynamic_cast<Expr *>(prRight.ast);
-    pr.ast = new BinOpExpr (left, op,right); //////////////////the rest of the BinOps follow this as well. 
-    return pr ;
+  // parser has already matched left expression 
+  ParseResult pr ;
+  Expr *left = dynamic_cast<Expr *> (prLeft.ast);
+  match ( star ) ;
+  string* op = new string(prevToken->lexeme);
+  ParseResult prRight = parseExpr (prevToken->lbp());
+  Expr *right = dynamic_cast<Expr *>(prRight.ast);
+
+  //parseExpr( prevToken->lbp() );
+  pr.ast = new BinOpExpr (left, op,right); //////////////////the rest of the BinOps follow this as well. 
+  return pr ;
 }
 
 //! Expr ::= Expr dash Expr
 ParseResult Parser::parseSubtraction ( ParseResult prLeft ) {
-    // parser has already matched left expression 
-    ParseResult pr ;
-    Expr *left = dynamic_cast<Expr *> (prLeft.ast);
-    match ( dash ) ;
-    string* op = new string(prevToken->lexeme);
-    ParseResult prRight = parseExpr (currToken->lbp());
-    Expr *right = dynamic_cast<Expr *>(prRight.ast);
-    pr.ast = new BinOpExpr (left, op,right); //////////////////the rest of the BinOps follow this as well. 
-    return pr ;
+  // parser has already matched left expression 
+  ParseResult pr ;
+  Expr *left = dynamic_cast<Expr *> (prLeft.ast);
+  match ( dash ) ;
+  string* op = new string(prevToken->lexeme);
+  ParseResult prRight = parseExpr (prevToken->lbp());
+  Expr *right = dynamic_cast<Expr *>(prRight.ast);
+
+  //parseExpr( prevToken->lbp() );
+  pr.ast = new BinOpExpr (left, op,right); //////////////////the rest of the BinOps follow this as well. 
+  return pr ;
 }
 
 //! Expr ::= Expr forwardSlash Expr
 ParseResult Parser::parseDivision ( ParseResult prLeft ) {
-    // parser has already matched left expression
-    ParseResult pr ;
-    Expr *left = dynamic_cast<Expr *> (prLeft.ast);
-    match ( forwardSlash ) ;
-    string* op = new string(prevToken->lexeme);
-    ParseResult prRight = parseExpr (currToken->lbp());
-    Expr *right = dynamic_cast<Expr *>(prRight.ast);
-    pr.ast = new BinOpExpr(left,op,right);
-    return pr ;
+  // parser has already matched left expression
+  ParseResult pr ;
+  Expr *left = dynamic_cast<Expr *> (prLeft.ast);
+  match ( forwardSlash ) ;
+  string* op = new string(prevToken->lexeme);
+  ParseResult prRight = parseExpr (prevToken->lbp());
+  Expr *right = dynamic_cast<Expr *>(prRight.ast);
+  pr.ast = new BinOpExpr(left,op,right);
+  return pr ;
 }
 
 
