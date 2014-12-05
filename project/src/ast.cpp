@@ -41,7 +41,9 @@ string SimpleDecl::unparse(){
 }
 
 string SimpleDecl::cppCode(){
-	return (string) "";
+	if(kwd == "Int") return (string) "int " + var->cppCode() + "; \n";
+	if(kwd == "Float") return (string) "float " + var->cppCode() + "; \n";
+	if(kwd == "Str") return (string) "string " + var->cppCode() + "; \n";
 }
 
 /*! \fn string MatrixDecl::unparse()
@@ -52,7 +54,7 @@ string MatrixDecl::unparse(){
 }
 
 string MatrixDecl::cppCode(){
-	return (string) "";
+	return (string) "Matrix " + var1->cppCode() +"( " + expr1->cppCode() + " ) ; \n" ;
 }
 
 /*! \fn string LongMatrixDecl::unparse()
@@ -63,7 +65,17 @@ string LongMatrixDecl::unparse(){
 }
 
 string LongMatrixDecl::cppCode(){
-	return (string) "";
+	string v1 = var1->cppCode();
+	string e1 = expr1->cppCode();
+	string v2 = var2->cppCode();
+	string e2 = expr2->cppCode();
+	string v3 = var3->cppCode();
+	
+	return (string) "Matrix " + v1 + "( "+ e1 +","+ e2 +") ; \n" 
+						+ "for (int " + v2 + " = 0;" + v2 + " < " + e1 + "; " + v2 +" ++ ) { \n"
+							+ "		for (int " + v3 + " = 0;" + v3 + " < " + e2 + "; " + v3 +" ++ ) { \n" 
+								+ " 	*("+ v1 +".access(" + v2 + "," + v3 + ")) = (" + expr3->cppCode() + " ); \n"
+									+ "		} \n}";
 }
 
 //Expr
@@ -79,25 +91,29 @@ string BinOpExpr::unparse ( ) {
 }
 
 string BinOpExpr::cppCode(){
-	return (string) "";
+	return  left->cppCode() + " " + *op + " " + right->cppCode() ;
 }
 
 /*! \fn string VarName::unparse()
     \brief Unparse for VarName node : varName
 */
-string VarName::unparse ( ) { return lexeme ; } ;
+string VarName::unparse ( ) { 
+	return lexeme ; 
+} 
 
 string VarName::cppCode(){
-	return (string) "";
+	return (string) lexeme;
 }
 
 /*! \fn string AnyConst::unparse()
     \brief Unparse for AnyConst node : integerConst | floatConst |  stringConst
 */
-string AnyConst::unparse ( ) { return constString + " "; } ;
+string AnyConst::unparse ( ) { 
+	return constString + " "; 
+} 
 
 string AnyConst::cppCode(){
-	return (string) "";
+	return (string) constString + " "; 
 }
 
 /*! \fn string MatrixRefExpr::unparse()
@@ -108,18 +124,18 @@ string MatrixRefExpr::unparse(){
 }
 
 string MatrixRefExpr::cppCode(){
-	return (string) "";
+	return (string) "*( " + var->cppCode() + ".access(" + expr1->cppCode() + ", " + expr2->cppCode() + ")) ";
 }
 
 /*! \fn string NestOrFuncExpr::unparse()
     \brief Unparse for NestOrFuncExpr node : varName '(' Expr ')'
 */
 string NestOrFuncExpr::unparse() {
-       return var->unparse() + " (" + expr->unparse() + ")";
+	   return var->unparse() + " (" + expr->unparse() + ")";
 }
 
 string NestOrFuncExpr::cppCode(){
-	return (string) "";
+	return (string) var->cppCode() + " (" + expr->cppCode() + ")";
 }
 
 /*! \fn string ParenExpr::unparse()
@@ -130,7 +146,7 @@ string ParenExpr::unparse() {
 }
 
 string ParenExpr::cppCode(){
-	return (string) "";
+	return (string) "(" + expr->cppCode() + ")";
 }
 
 /*! \fn string LetExpr::unparse()
@@ -141,7 +157,7 @@ string LetExpr::unparse() {
 }
 
 string LetExpr::cppCode(){
-	return (string) "";
+	return (string) "({" + stmts->cppCode() + "(" + expr->cppCode() + ") ; })" ;
 }
 
 /*! \fn string IfElseExpr::unparse()
