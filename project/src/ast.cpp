@@ -168,18 +168,18 @@ string IfElseExpr::unparse() {
 }
 
 string IfElseExpr::cppCode(){
-	return (string) "";
+  return (string) "if (" + expr1->cppCode() +") { \n " + expr2->cppCode() + "} \n else { \n" + expr3->cppCode() +" \n }" ;
 }
 
 /*! \fn string NotExpr::unparse()
     \brief Unparse for NotExpr node : '!' Expr
 */
 string NotExpr::unparse() {
-       return "!" + expr->unparse();
+  return "!" + expr->unparse();
 }
 
 string NotExpr::cppCode(){
-	return (string) "";
+  return (string) "! (" + expr->cppCode() +") ";
 }
 
 // Stmts
@@ -193,7 +193,7 @@ string EmptyStmts::unparse() {
 }
 
 string EmptyStmts::cppCode(){
-	return (string) "";
+	return (string) " ";
 }
 
 /*! \fn string StmtsSeq::unparse()
