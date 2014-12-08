@@ -204,7 +204,7 @@ string StmtsSeq::unparse() {
 }
 
 string StmtsSeq::cppCode(){
-	return (string) "";
+	return (string) stmt->cppCode() + stmts->cppCode(); //Can it be this simple? I'm not sure.
 }
 
 // Stmt
@@ -218,7 +218,7 @@ string DeclStmt::unparse() {
 }
 
 string DeclStmt::cppCode(){
-	return (string) "";
+	return (string) decl->cppCode(); //Is this really it?
 }
 
 /*! \fn string IfStmt::unparse()
@@ -229,7 +229,7 @@ string IfStmt::unparse() {
 }
 
 string IfStmt::cppCode(){
-	return (string) "";
+	return (string) "if (" + ifExpr->cppCode() + ") " + thenStmt->cppCode() ;
 }
 
 /*! \fn string IfElseStmt::unparse()
@@ -240,7 +240,14 @@ string IfElseStmt::unparse() {
 }
 
 string IfElseStmt::cppCode(){
-	return (string) "";
+       /* The commented one is the format I'm familiar with, 
+       the other one is he shorthand given in the example translation files.
+       I'm not sure if I got it right. -SS
+       */
+      // return (string) "if (" + ifExpr->cppCode() + ") {\n  " + thenStmt->cppCode() + 
+       //"\n}\nelse {\n" + elseStmt->cppCode() + "\n}"
+       
+	return (string) "( (" + ifExpr->cppCode() + ") ? (" +thenStmt->cppCode() + ") : " + elseStmt->cppCode() + " );";
 }
 
 /*! \fn string BlockStmt::unparse()
@@ -251,7 +258,7 @@ string BlockStmt::unparse() {
 }
 
 string BlockStmt::cppCode(){
-	return (string) "";
+	return (string) "{ \n" + statements->cppCode()+ "\n}";
 }
 
 /*! \fn string PrintStmt::unparse()
@@ -262,18 +269,18 @@ string PrintStmt::unparse() {
 }
 
 string PrintStmt::cppCode(){
-	return (string) "";
+	return (string) "cout << " + printExpr->cppCode() + " ;";
 }
 
 /*! \fn string AssignStmt::unparse()
     \brief Unparse for AssignStmt node : varName '=' Expr ';'
 */
 string AssignStmt::unparse() {
-  return var->unparse() + " = " + rightExpr-> unparse() + ";";
+  return var->unparse() + " = " + rightExpr->unparse() + ";";
 }
 
 string AssignStmt::cppCode(){
-	return (string) "";
+	return (string) var->cppCode() + " = " + rightExpr->cppCode() + " ;";
 }
 
 /*! \fn string LongAssignStmt::unparse()
@@ -284,7 +291,7 @@ string LongAssignStmt::unparse() {
 }
 
 string LongAssignStmt::cppCode(){
-	return (string) "";
+	return (string) "*("+var->cppCode() + ".access(" + leftExpr1->cppCode() + ", " + leftExpr2->cppCode() + ")) = " + rightExpr->cppCode() + " ;";
 }
 
 /*! \fn string WhileStmt::unparse()
@@ -295,7 +302,7 @@ string WhileStmt::unparse() {
 }
 
 string WhileStmt::cppCode(){
-	return (string) "";
+	return (string) "while (" + whileExpr->cppCode() + " )" + whileStmt->cppCode();
 }
 
 /*! \fn string ForStmt::unparse()
@@ -306,6 +313,7 @@ string ForStmt::unparse() {
 }
 
 string ForStmt::cppCode(){
-	return (string) "";
+       std::string var1 = var->cppCode();
+	return (string) "for (" + var1 + " = " + expr1->cppCode() + "; " + var1 + " <= " + expr2->cppCode() + "; " + var1 + " ++ )" + statements->cppCode();
 }
  
