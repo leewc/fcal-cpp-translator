@@ -44,6 +44,7 @@ string SimpleDecl::cppCode(){
 	if(kwd == "Int") return (string) "int " + var->cppCode() + "; \n";
 	if(kwd == "Float") return (string) "float " + var->cppCode() + "; \n";
 	if(kwd == "Str") return (string) "string " + var->cppCode() + "; \n";
+	return "ERROR: Should not get here"; //to keep compiler quiet
 }
 
 /*! \fn string MatrixDecl::unparse()

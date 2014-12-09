@@ -28,11 +28,13 @@ parseResult.o:	parseResult.cpp parseResult.h ast.h
 	g++ $(FLAGS) -c parseResult.cpp
 
 # Testing files and targets.
-run-tests:	regex_tests scanner_tests parser_tests ast_tests
+run-tests:	regex_tests scanner_tests parser_tests ast_tests codegeneration_tests
 	./regex_tests
 	./scanner_tests
 	./parser_tests
 	./ast_tests
+	#./codegeneration_tests
+
 regex_tests:	regex_tests.cpp regex.o
 	g++ $(FLAGS) -I$(CXX_DIR) -o regex_tests regex.o regex_tests.cpp
 
@@ -59,11 +61,12 @@ ast_tests: ast_tests.cpp ast_tests.h ast.o parser.o readInput.o extToken.o regex
 
 ast_tests.cpp: 	parser.h ast.o ast_tests.h readInput.h
 	$(CXXTEST) $(CXXFLAGS) -o ast_tests.cpp ast_tests.h
-	
-codegeneration_tests:	codegeneration_tests.cpp
-	g++ $(FLAGS) -I$(CXX_DIR) -o codegeneration_tests readInput.o scanner.o parser.o ast.o codegeneration_tests.cpp
 
-codegeneration_tests.cpp:	codegeneration_tests.h ast.o parser.o scanner.o readInput.o 
+codegeneration_tests:	codegeneration_tests.cpp
+	g++ $(FLAGS) -I$(CXX_DIR) -o codegeneration_tests readInput.o scanner.o parser.o ast.o \
+		parseResult.o regex.o extToken.o codegeneration_tests.cpp
+
+codegeneration_tests.cpp:	codegeneration_tests.h ast.o parser.o scanner.o readInput.o extToken.o regex.o parseResult.o 
 	$(CXXTEST) --error-printer -o codegeneration_tests.cpp codegeneration_tests.h
 
 clean:
