@@ -41,9 +41,9 @@ string SimpleDecl::unparse(){
 }
 
 string SimpleDecl::cppCode(){
-	if(kwd == "Int") return (string) "int " + var->cppCode() + "; \n";
-	if(kwd == "Float") return (string) "float " + var->cppCode() + "; \n";
-	if(kwd == "Str") return (string) "string " + var->cppCode() + "; \n";
+	if(kwd == "Int") return (string) "int " + var->cppCode() + " ; \n";
+	if(kwd == "Float") return (string) "float " + var->cppCode() + " ; \n";
+	if(kwd == "Str") return (string) "string " + var->cppCode() + " ; \n";
 	return "ERROR: Should not get here"; //to keep compiler quiet
 }
 
@@ -92,7 +92,7 @@ string BinOpExpr::unparse ( ) {
 }
 
 string BinOpExpr::cppCode(){
-	return  left->cppCode() + " " + *op + " " + right->cppCode() ;
+	return  "(" + left->cppCode() + " " + *op + " " + right->cppCode() + ")" ;
 }
 
 /*! \fn string VarName::unparse()
@@ -194,7 +194,7 @@ string EmptyStmts::unparse() {
 }
 
 string EmptyStmts::cppCode(){
-	return (string) " ";
+	return (string) " \n";
 }
 
 /*! \fn string StmtsSeq::unparse()
@@ -270,7 +270,7 @@ string PrintStmt::unparse() {
 }
 
 string PrintStmt::cppCode(){
-	return (string) "cout << " + printExpr->cppCode() + " ;";
+	return (string) "cout << " + printExpr->cppCode() + " ; \n";
 }
 
 /*! \fn string AssignStmt::unparse()
