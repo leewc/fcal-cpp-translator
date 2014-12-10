@@ -17,8 +17,21 @@ main () {
   
   
   
+  //zero initialize matrix
+  Matrix output[rows1,cols2] rows , cols = 0;
+  
+  Int i;
+  Int j;
+  Int k;
+  
   //do matmul
-  Matrix output[rows1,cols2] 
+  for (i = 0 : rows1) {
+      for (j = 0 : cols1) {
+          for (k = 0 : cols2) {
+              output[i,j] =  output[i,j] + m1[i,k]*m2[k,j];
+          }
+      }
+  }
   
 }
 
