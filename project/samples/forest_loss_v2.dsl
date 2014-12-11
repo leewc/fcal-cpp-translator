@@ -103,7 +103,7 @@ main() {
   // Output results  
   Int j;
   for(j = 0 : rows-1) {
-    //print(avgScore[j,0]);
+    print(avgScore[j,0]);
     print("\n");
   }
   

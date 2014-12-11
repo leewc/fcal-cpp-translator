@@ -6,29 +6,30 @@
 #include <fstream>
 
 class Matrix {
-public:
-    Matrix(int i, int j) ;
-    Matrix (const Matrix& m) ;
+ public:
+  Matrix(int _rows, int _cols) ;
+  Matrix (const Matrix& m) ;
 
-    int numRows ( ) ;
-    int numCols ( ) ;
+  int numRows ( ) ;
+  int numCols ( ) ;
 
-    float *access(const int i, const int j) const ;
-    friend std::ostream& operator<<(std::ostream &os, Matrix &m) ;
+  float *access(const int i, const int j) const ;
+  friend std::ostream& operator<<(std::ostream &os, Matrix &m) ;
 
-    static Matrix readMatrix ( std::string filename ) ;
+  static Matrix readMatrix ( std::string filename ) ;
 
-private:
-    Matrix() { }
-    int rows ;
-    int cols ;
+ private:
+  Matrix() { }
+  int rows ;
+  int cols ;
 
-    /* Your implementation of "data" may vary.  There are ways in
+  /* Your implementation of "data" may vary.  There are ways in
        which data can be an array of arrays and thus simplify the
        access method, at the cost of complicating the process of
        allocating space for data.  The choice is entirely up to
        you. */
-    float *data ;
+  /* this points to a 2D array of floats. */
+  float **data;
 } ;
 
 #endif // MATRIX_H
