@@ -114,7 +114,7 @@ string AnyConst::unparse ( ) {
 } 
 
 string AnyConst::cppCode(){
-	return (string) constString + " "; 
+	return (string) constString; 
 }
 
 /*! \fn string MatrixRefExpr::unparse()
@@ -158,7 +158,7 @@ string LetExpr::unparse() {
 }
 
 string LetExpr::cppCode(){
-	return (string) "({" + stmts->cppCode() + "(" + expr->cppCode() + ") ; })" ;
+	return (string) "({" + stmts->cppCode() + expr->cppCode() + " ; \n})" ;
 }
 
 /*! \fn string IfElseExpr::unparse()
@@ -219,7 +219,7 @@ string DeclStmt::unparse() {
 }
 
 string DeclStmt::cppCode(){
-	return (string) decl->cppCode(); //Is this really it?
+	return (string) decl->cppCode(); //Is this really it? Pretty sure it is. I checked the translate and our version.
 }
 
 /*! \fn string IfStmt::unparse()
@@ -259,7 +259,7 @@ string BlockStmt::unparse() {
 }
 
 string BlockStmt::cppCode(){
-	return (string) "{ \n" + statements->cppCode()+ "\n}";
+	return (string) "{ \n" + statements->cppCode()+ "} \n";
 }
 
 /*! \fn string PrintStmt::unparse()
@@ -281,7 +281,7 @@ string AssignStmt::unparse() {
 }
 
 string AssignStmt::cppCode(){
-	return (string) var->cppCode() + " = " + rightExpr->cppCode() + " ;";
+	return (string) var->cppCode() + " = " + rightExpr->cppCode() + " ; \n";
 }
 
 /*! \fn string LongAssignStmt::unparse()
