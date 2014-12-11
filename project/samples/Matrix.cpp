@@ -7,16 +7,16 @@
 using namespace std;
 Matrix :: Matrix (int _rows, int _cols)
 {
-  //can either use new (adds to heap) or malloc. Chose malloc because new requires consts
+  //can either use new (adds to heap) or malloc. Using new.
   rows = _rows;
   cols = _cols;
-
-  data = (float **) malloc(rows * sizeof (float *));
+  
+  data = new float*[rows];
+  
   for (int i = 0; i < rows; i ++)
     {
-      data[i] = (float*) malloc (cols * sizeof (float));
+      data[i] = new float[cols];
     }
-
 }
 
 int Matrix::numRows ( )
@@ -46,14 +46,17 @@ float* Matrix::access(const int i, const int j) const
 std::ostream& operator<<(std::ostream &os, Matrix &m)
 {
   os << m.numRows() << " " << m.numCols() << std::endl;
+  
+  
   for (int i = 0; i < m.numRows(); i++)
 	  {
 		for (int j = 0; j < m.numCols(); j++)
 		{
-			os << m.access(i,j) << "  ";	//must be a pointer to where the address points to?? does this apply for ifstream
+			os << *(m.access(i,j)) << "  ";	//must be a pointer to where the address points to?? does this apply for ifstream
 		}
 		os << std::endl;
 	  }
+	
   return os;
 }
 
@@ -96,26 +99,24 @@ Matrix Matrix::readMatrix (std::string filename)
 Matrix::Matrix (const Matrix& m)
 {
 	//we need to perform deep copy or else it will print uninitialized values
-	int row = m.rows;
-	int col = m.cols;
-	
-	data = (float **) malloc(rows * sizeof (float *));
+	// previous error was due to declaring an int, which would allocate new memory for that int. making anther int not initialized
+	rows = m.rows;
+	cols = m.cols;
+	 
+	data = new float*[rows];
+  
 	for (int i = 0; i < rows; i ++)
     {
-      data[i] = (float*) malloc (cols * sizeof (float));
+		data[i] = new float[cols];
     }
     
-    for (int j = 0; j < row; j++)
+    for (int j = 0; j < rows; j++)
 	  {
-		for (int k = 0; j < col; k++)
+		for (int k = 0; k < cols; k++)
 		{
-			cout << m.access(j,k) << endl;;
-			float t =  *(m.access(j,k));
-			data[j][k] = t;	//must be a pointer to where the address points to
+			data[j][k] = *(m.access(j,k));	//must be a pointer to where the address points to
 		}
 	  }
-    
-    //copy over the datas
     
 }
 /*
