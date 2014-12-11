@@ -10,8 +10,10 @@ class Matrix {
   Matrix(int _rows, int _cols) ;
   Matrix (const Matrix& m) ;
 
-  int numRows ( ) ;
-  int numCols ( ) ;
+  int numRows ( );
+   
+  int numCols ( );
+   
 
   float *access(const int i, const int j) const ;
   friend std::ostream& operator<<(std::ostream &os, Matrix &m) ;
