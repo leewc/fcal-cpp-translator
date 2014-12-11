@@ -54,8 +54,8 @@ public:
 
         // 2. Verify that the ast field is not null
         TSM_ASSERT ( file + " failed to generate an AST.", pr1.ast != NULL );
-
-        // 3. Verify that the C++ code is non-empty.
+	
+	// 3. Verify that the C++ code is non-empty.
         string cpp1 = pr1.ast->cppCode() ;
         TSM_ASSERT ( file + " failed to generate non-empty C++ code.", 
                      cpp1.length() > 0 ) ;
@@ -63,12 +63,13 @@ public:
         writeFile ( cpp1, cppfile ) ;
 
         // 4. Compile generated C++ file
+	cout << "Compiling ... " << endl;
         string compile = "g++ ../samples/Matrix.cpp " + cppfile +
                          " -o " + cppexec ;
         rc = system ( compile.c_str() ) ;
         TSM_ASSERT_EQUALS ( "translation of " + file + 
                             " failed to compile.", rc, 0 ) ;
-
+	
         string cleanup = "rm -f " + cppout ;
         system ( cleanup.c_str() ) ;
 
@@ -90,7 +91,7 @@ public:
     void test_sample_4 ( void ) { codegen_tests ( "sample_4", true ); }
     void test_sample_5 ( void ) { codegen_tests ( "sample_5", true ); }
     void test_sample_6 ( void ) { codegen_tests ( "sample_6", true ); }
-    void xtest_sample_7 ( void ) { codegen_tests ( "sample_7", true ); }
+    void test_sample_7 ( void ) { codegen_tests ( "sample_7", true ); }
     void xtest_sample_8 ( void ) { codegen_tests ( "sample_8", true ); }
 
      /* You should create .expected files in ../samples for these with the expected
