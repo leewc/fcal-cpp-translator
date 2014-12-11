@@ -105,6 +105,7 @@ void Parser::initialzeParser (const char* text) {
     \brief Begins parsing, attaches Root node for ast
 */ 
 ParseResult Parser::parseProgram () {
+    
     ParseResult pr ;
     // root
     // Program ::= varName '(' ')' '{' Stmts '}' 
@@ -292,30 +293,34 @@ ParseResult Parser::parseStmt () {
     }
     //Stmt ::= varName '=' Expr ';'  | varName '[' Expr ',' Expr ']' '=' Expr ';'
     else if  ( attemptMatch (variableName) ) {
+		VarName *var = new VarName(prevToken->lexeme);
         if (attemptMatch ( leftSquare ) ) {
-              VarName *var = new VarName(prevToken->lexeme);
+              
               ParseResult prExpr = parseExpr(0);
               Expr *expr1 = dynamic_cast<Expr *>(prExpr.ast);
-              
+
               match ( comma ) ;
               ParseResult prExpr2 = parseExpr(0);
               Expr *expr2 = dynamic_cast<Expr *>(prExpr2.ast);
               
               match  ( rightSquare ) ;
-              
               match(assign);
-			  ParseResult prExpr3 = parseExpr(0);
+              ParseResult prExpr3 = parseExpr(0);
 			  Expr *expr3 = dynamic_cast<Expr *>(prExpr3.ast);
 			
+			
               pr.ast = new LongAssignStmt(var,expr1,expr2,expr3);
+              match (semiColon);
+            
         }
         else {
-			VarName *var = new VarName(prevToken->lexeme);
+			//VarName *var = new VarName(prevToken->lexeme);
 			match(assign);
 			ParseResult prExpr = parseExpr(0);
+	
             Expr *expr1 = dynamic_cast<Expr *>(prExpr.ast);
+    
             pr.ast = new AssignStmt(var,expr1);
-			
 			match(semiColon);
 		}
     }
@@ -371,6 +376,7 @@ ParseResult Parser::parseStmt () {
         throw ( makeErrorMsg ( currToken->terminal ) + " while parsing a statement" ) ;
     }
     // Stmt ::= variableName assign Expr semiColon
+    
     return pr ;
 }
 

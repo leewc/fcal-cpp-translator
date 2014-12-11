@@ -54,8 +54,10 @@ public:
 
         //! 3. Verify that the "unparsing" is non-empty.
         string up1 = pr1.ast->unparse() ;
+	
 	//cout << "pass!" << endl;
 	//cout << up1 << endl;
+    
         writeFile(up1,(path+"up1").c_str());
         TSM_ASSERT ( file + " failed to generate non-empty unparsing.", 
                      up1.length() > 0 ) ;
@@ -111,8 +113,10 @@ public:
     //! Full DSL program that calculated forest loss. 
     //! Test implemented and passed on November 20th at 6:15PM (this test passed with the previous 3)
     void test_forest_loss ( void ) { unparse_tests ( "forest_loss_v2.dsl" ); }
+    
+    void test_sample_7 (void ) { unparse_tests ("sample_7.dsl");}
 
-
+    void test_sample_8 (void) { unparse_tests ("sample_8.dsl");}
 
 } ;
 

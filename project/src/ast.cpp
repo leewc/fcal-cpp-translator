@@ -255,7 +255,7 @@ string IfElseStmt::cppCode(){
     \brief Unparse for BlockStmt node : '{' Stmts '}'
 */
 string BlockStmt::unparse() {
-  return "{ \n" + statements->unparse()+ "\n}";
+  return "{ \n" + statements->unparse()+ "\n} \n";
 }
 
 string BlockStmt::cppCode(){
@@ -266,7 +266,7 @@ string BlockStmt::cppCode(){
     \brief Unparse for PrintStmt node : 'print' '(' Expr ')' ';'
 */
 string PrintStmt::unparse() {
-  return "print (" + printExpr->unparse() + " );" ;
+  return "print (" + printExpr->unparse() + "); \n" ;
 }
 
 string PrintStmt::cppCode(){
@@ -292,6 +292,7 @@ string LongAssignStmt::unparse() {
 }
 
 string LongAssignStmt::cppCode(){
+	cout << var->cppCode() << endl;
 	return (string) "*("+var->cppCode() + ".access(" + leftExpr1->cppCode() + ", " + leftExpr2->cppCode() + ")) = " + rightExpr->cppCode() + " ;";
 }
 
@@ -310,7 +311,7 @@ string WhileStmt::cppCode(){
     \brief Unparse for ForStmt node : 'for' '(' varName '=' Expr ':' Expr ')' Stmt
 */
 string ForStmt::unparse() {
-  return "for (" + var->unparse() +" = " + expr1->unparse() + ":" + expr2->unparse() + ")" + statements->unparse();
+  return "for (" + var->unparse() +" = " + expr1->unparse() + ":" + expr2->unparse() + ") \n" + statements->unparse();
 }
 
 string ForStmt::cppCode(){

@@ -33,7 +33,7 @@ run-tests:	regex_tests scanner_tests parser_tests ast_tests codegeneration_tests
 	./scanner_tests
 	./parser_tests
 	./ast_tests
-	#./codegeneration_tests
+	./codegeneration_tests
 
 regex_tests:	regex_tests.cpp regex.o
 	g++ $(FLAGS) -I$(CXX_DIR) -o regex_tests regex.o regex_tests.cpp

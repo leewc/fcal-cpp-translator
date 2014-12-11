@@ -98,5 +98,15 @@ public:
         msg += "\n" + pr.errors ; 
         TSM_ASSERT ( msg , pr.ok );
     }
+    
+    void test_parse_sample7 ( ) {
+        const char *filename = "../samples/sample_7.dsl" ;
+        const char *text = readInputFromFile ( filename )  ;
+        TS_ASSERT ( text ) ;
+        ParseResult pr = p->parse ( text ) ;
+        string msg (filename) ;
+        msg += "\n" + pr.errors ; 
+        TSM_ASSERT ( msg , pr.ok );
+    }
 
 } ;
