@@ -1,17 +1,31 @@
-/* This program is just a copy of sample_4.dsl. You should write your
-   solution for my_code_2 in this file. */
-
-main () { 
-  Integer x;
-  x = 2 + 4;
-  Integer y;
-  y = x * 3 ;
-
-  print(x) ;
-  print("\n") ;
-  print(y) ;
-  print("\n") ;
+/*Prints out the first 10 Fibonacci numbers*/
+main() {
+	Int previous;
+	previous = 0 ;
+	Int current;
+	current = 1 ;
+	Int next;
+	Int count;
+	count = 0 ;
+	while(count<10){
+		next = current + previous ;
+		print(next) ;
+		print("\n") ;
+		previous = current ;
+		current = next ;		
+	}
 }
 
 
-
+/*
+1
+1
+2
+3
+5
+8
+13
+21
+34
+55
+*/

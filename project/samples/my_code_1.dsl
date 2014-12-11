@@ -1,5 +1,4 @@
-/* This program is just a copy of sample_4.dsl. You should write your
-   solution for my_code_1 in this file. */
+/* Matrix multiplication */
 
 main () { 
   Matrix m1 = readMatrix ( "../samples/my_code_1a.data" ) ;
@@ -33,6 +32,7 @@ main () {
       }
   }
   
+  print(output);
 }
 
 
