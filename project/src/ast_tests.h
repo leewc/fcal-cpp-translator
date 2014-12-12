@@ -117,7 +117,8 @@ public:
     void test_sample_7 (void ) { unparse_tests ("sample_7.dsl");}
 
     void test_sample_8 (void) { unparse_tests ("sample_8.dsl");}
-
+void test_my_code_1 (void) {unparse_tests ("my_code_1.dsl");}
+void test_my_code_2 (void) {unparse_tests ("my_code_2.dsl");}
 } ;
 
 
