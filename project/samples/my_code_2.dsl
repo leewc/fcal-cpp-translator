@@ -5,14 +5,16 @@ main() {
 	Int current;
 	current = 1 ;
 	Int next;
+	next = current + previous;
 	Int count;
 	count = 0 ;
 	while(count<10){
-		next = current + previous ;
 		print(next) ;
 		print("\n") ;
+		next = current + previous ;
 		previous = current ;
-		current = next ;		
+		current = next ;
+		count = count + 1;		
 	}
 }
 
