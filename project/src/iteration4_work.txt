@@ -1,0 +1,7 @@
+Joint work: half of the cppCode() functions in ast.cpp were done together during lab hours.
+Roles for division of work and ideas for implementation of the matrix class and what kind of
+FCAL programs to write were also done together in lab.
+Lee: Implemented the Matrix class for cpp code.
+  Found most of the bugs in the cppCode() functions as well as parser fixes.
+Sophia: Wrote FCAL programs and the cppCode() functions that weren't completed jointly. 
+  Helped find some of the bugs in the cppCode() functions and parser.
