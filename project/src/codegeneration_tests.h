@@ -88,11 +88,11 @@ public:
         }
     }
 
-    void xtest_sample_4 ( void ) { codegen_tests ( "sample_4", true ); }
-    void xtest_sample_5 ( void ) { codegen_tests ( "sample_5", true ); }
-    void xtest_sample_6 ( void ) { codegen_tests ( "sample_6", true ); }
-    void xtest_sample_7 ( void ) { codegen_tests ( "sample_7", true ); }
-    void xtest_sample_8 ( void ) { codegen_tests ( "sample_8", true ); }
+    void test_sample_4 ( void ) { codegen_tests ( "sample_4", true ); }
+    void test_sample_5 ( void ) { codegen_tests ( "sample_5", true ); }
+    void test_sample_6 ( void ) { codegen_tests ( "sample_6", true ); }
+    void test_sample_7 ( void ) { codegen_tests ( "sample_7", true ); }
+    void test_sample_8 ( void ) { codegen_tests ( "sample_8", true ); }
 
      /* You should create .expected files in ../samples for these with the expected
      * output of your programs. You can then change the second argument to true to

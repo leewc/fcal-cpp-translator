@@ -91,7 +91,7 @@ string BinOpExpr::unparse ( ) {
 }
 
 string BinOpExpr::cppCode(){
-	return  "(" + left->cppCode() + " " + *op + " " + right->cppCode() + ")" ;
+	return  " (" + left->cppCode() + " " + *op + " " + right->cppCode() + ") " ;
 }
 
 /*! \fn string VarName::unparse()
@@ -140,7 +140,7 @@ string NestOrFuncExpr::cppCode(){
 	{	
 		return (string) expr->cppCode()+ "." + var->cppCode() + "()"; 
 	}
-	return (string) var->cppCode() + " (" + expr->cppCode() + ")";
+	return (string) var->cppCode() + " (" + expr->cppCode() + " )";
 }
 
 /*! \fn string ParenExpr::unparse()
@@ -151,7 +151,7 @@ string ParenExpr::unparse() {
 }
 
 string ParenExpr::cppCode(){
-	return (string) "(" + expr->cppCode() + ")";
+	return (string) "" + expr->cppCode() + "";
 }
 
 /*! \fn string LetExpr::unparse()
@@ -162,7 +162,7 @@ string LetExpr::unparse() {
 }
 
 string LetExpr::cppCode(){
-	return (string) "({" + stmts->cppCode() + expr->cppCode() + "; \n}) " ;
+	return (string) "({" + stmts->cppCode() + expr->cppCode() + "; })  " ;
 }
 
 /*! \fn string IfElseExpr::unparse()
@@ -174,7 +174,6 @@ string IfElseExpr::unparse() {
 
 string IfElseExpr::cppCode(){
 	return (string) "( (" + expr1->cppCode() + ") ? (" +expr2->cppCode() + ") : " + expr3->cppCode() + " )";	 
-  //return (string) "if (" + expr1->cppCode() +") { \n " + expr2->cppCode() + "} \n else { \n" + expr3->cppCode() +" ;\n }" ;
 }
 
 /*! \fn string NotExpr::unparse()
@@ -199,7 +198,7 @@ string EmptyStmts::unparse() {
 }
 
 string EmptyStmts::cppCode(){
-	return (string) " \n";
+	return (string) "  "; //there was a \n here
 }
 
 /*! \fn string StmtsSeq::unparse()
