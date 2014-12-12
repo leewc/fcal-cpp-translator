@@ -75,8 +75,7 @@ string LongMatrixDecl::cppCode(){
 	return (string) "Matrix " + v1 + "( "+ e1 +","+ e2 +") ; \n" 
 						+ "for (int " + v2 + " = 0;" + v2 + " < " + e1 + "; " + v2 +" ++ ) { \n"
 							+ "		for (int " + v3 + " = 0;" + v3 + " < " + e2 + "; " + v3 +" ++ ) { \n" 
-								+ " 	*("+ v1 +".access(" + v2 + "," + v3 + ")) = (" + expr3->cppCode() + " ); \n"
-									+ "		} \n}";
+								+ " 	*("+ v1 +".access(" + v2 + "," + v3 + ")) = " + expr3->cppCode() + "	;} } \n";
 }
 
 //Expr
@@ -137,6 +136,10 @@ string NestOrFuncExpr::unparse() {
 }
 
 string NestOrFuncExpr::cppCode(){
+	if (var->cppCode() == "numRows" || var->cppCode() == "numCols") 
+	{	
+		return (string) expr->cppCode()+ "." + var->cppCode() + "()"; 
+	}
 	return (string) var->cppCode() + " (" + expr->cppCode() + ")";
 }
 
@@ -170,7 +173,8 @@ string IfElseExpr::unparse() {
 }
 
 string IfElseExpr::cppCode(){
-  return (string) "if (" + expr1->cppCode() +") { \n " + expr2->cppCode() + "} \n else { \n" + expr3->cppCode() +" \n }" ;
+	return (string) "( (" + expr1->cppCode() + ") ? (" +expr2->cppCode() + ") : " + expr3->cppCode() + " );";	 
+  //return (string) "if (" + expr1->cppCode() +") { \n " + expr2->cppCode() + "} \n else { \n" + expr3->cppCode() +" ;\n }" ;
 }
 
 /*! \fn string NotExpr::unparse()
