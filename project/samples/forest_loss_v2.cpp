@@ -21,7 +21,7 @@ for (int i = 0;i < years; i ++ ) {
  	*(pt.access(i,j)) = ({int k ; 
 k = ((i * season_length) + j) ; 
  
-( ((k >= cols)) ? ((0.0  - 25 )) : *( data.access(row, k))  );; 
+( ((k >= cols)) ? ((0.0  - 25 )) : *( data.access(row, k))  ); 
 }) 	;} } 
 Matrix comparisonMatrix( years,years) ; 
 for (int i = 0;i < years; i ++ ) { 
@@ -35,7 +35,7 @@ diff = ((diff + *( pt.access(i, k)) ) - *( pt.access(j, k)) ) ;
 } 
  
 (diff / season_length); 
-})  );	;} } 
+})  )	;} } 
 Matrix modelAvgScore( years,1 ) ; 
 for (int yr = 0;yr < years; yr ++ ) { 
 		for (int dontcare = 0;dontcare < 1 ; dontcare ++ ) { 

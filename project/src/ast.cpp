@@ -173,7 +173,7 @@ string IfElseExpr::unparse() {
 }
 
 string IfElseExpr::cppCode(){
-	return (string) "( (" + expr1->cppCode() + ") ? (" +expr2->cppCode() + ") : " + expr3->cppCode() + " );";	 
+	return (string) "( (" + expr1->cppCode() + ") ? (" +expr2->cppCode() + ") : " + expr3->cppCode() + " )";	 
   //return (string) "if (" + expr1->cppCode() +") { \n " + expr2->cppCode() + "} \n else { \n" + expr3->cppCode() +" ;\n }" ;
 }
 
