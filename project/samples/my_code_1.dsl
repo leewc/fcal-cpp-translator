@@ -30,7 +30,7 @@ main () {
   for (i = 0 : rows1-1) {
       for (j = 0 : cols1-1) {
           for (k = 0 : cols2-1) {
-              output[i,j] =  m1[i,k] * m2[k,j];
+              output[i,j] =  output[i,j] + m1[i,k] * m2[k,j];
           }
       }
   }
