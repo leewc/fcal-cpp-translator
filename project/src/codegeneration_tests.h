@@ -97,7 +97,7 @@ public:
      /* You should create .expected files in ../samples for these with the expected
      * output of your programs. You can then change the second argument to true to
      * validate these. */
-    void xtest_my_code_1 ( void ) { codegen_tests ( "my_code_1", false ) ; }
+    void test_my_code_1 ( void ) { codegen_tests ( "my_code_1", false ) ; }
     void test_my_code_2 ( void ) { codegen_tests ( "my_code_2", false ) ; }
 
     void test_forest_loss ( void ) { codegen_tests ( "forest_loss_v2", true ); }
