@@ -103,6 +103,7 @@ string VarName::unparse ( ) {
 } 
 
 string VarName::cppCode(){
+	if (lexeme == "readMatrix") return "Matrix::readMatrix ";
 	return (string) lexeme;
 }
 
@@ -114,7 +115,7 @@ string AnyConst::unparse ( ) {
 } 
 
 string AnyConst::cppCode(){
-	return (string) constString; 
+	return (string) constString + " "; 
 }
 
 /*! \fn string MatrixRefExpr::unparse()
@@ -292,7 +293,7 @@ string LongAssignStmt::unparse() {
 }
 
 string LongAssignStmt::cppCode(){
-	cout << var->cppCode() << endl;
+	//cout << var->cppCode() << endl;
 	return (string) "*("+var->cppCode() + ".access(" + leftExpr1->cppCode() + ", " + leftExpr2->cppCode() + ")) = " + rightExpr->cppCode() + " ;";
 }
 
