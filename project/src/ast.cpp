@@ -162,7 +162,7 @@ string LetExpr::unparse() {
 }
 
 string LetExpr::cppCode(){
-	return (string) "({" + stmts->cppCode() + expr->cppCode() + " ; \n})" ;
+	return (string) "({" + stmts->cppCode() + expr->cppCode() + "; \n}) " ;
 }
 
 /*! \fn string IfElseExpr::unparse()

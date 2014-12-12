@@ -21,8 +21,8 @@ for (int i = 0;i < years; i ++ ) {
  	*(pt.access(i,j)) = ({int k ; 
 k = ((i * season_length) + j) ; 
  
-( ((k >= cols)) ? ((0.0  - 25 )) : *( data.access(row, k))  ); ; 
-})	;} } 
+( ((k >= cols)) ? ((0.0  - 25 )) : *( data.access(row, k))  );; 
+}) 	;} } 
 Matrix comparisonMatrix( years,years) ; 
 for (int i = 0;i < years; i ++ ) { 
 		for (int j = 0;j < years; j ++ ) { 
@@ -34,8 +34,8 @@ diff = ((diff + *( pt.access(i, k)) ) - *( pt.access(j, k)) ) ;
  
 } 
  
-(diff / season_length) ; 
-}) );	;} } 
+(diff / season_length); 
+})  );	;} } 
 Matrix modelAvgScore( years,1 ) ; 
 for (int yr = 0;yr < years; yr ++ ) { 
 		for (int dontcare = 0;dontcare < 1 ; dontcare ++ ) { 
@@ -72,8 +72,8 @@ score3 = (score3 + *( comparisonMatrix.access(x, y)) ) ;
 } 
 score3 = (score3 / (((((years - yr)) * (((years - yr) - 1 ))) / 2 ))) ; 
  
-((score1 - score2) - score3) ; 
-})	;} } 
+((score1 - score2) - score3); 
+}) 	;} } 
 float maximum ; 
 maximum = (0.0  - 25 ) ; 
 int k ; 
@@ -86,8 +86,8 @@ maximum = *( modelAvgScore.access(k, 0 ))  ;
  
 } 
  
-maximum ; 
-})	;} } 
+maximum; 
+}) 	;} } 
 int j ; 
 for (j = 0 ; j <= (rows - 1 ); j ++ ){ 
 cout << *( avgScore.access(j, 0 ))  ; 
